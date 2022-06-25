@@ -5,11 +5,11 @@ function Item(props) {
   return (
     <Paper
       id={props.id}
-      elevation={8}
+      elevation={6}
       sx={{
         padding: "10px",
-        textAlign: "center",
         backgroundColor: "#fff",
+        borderRadius: "3%"
       }}
     >
       {props.children}
