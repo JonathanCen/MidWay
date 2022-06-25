@@ -1,0 +1,26 @@
+{
+  "name": "MidWay",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "client": "npm run start --prefix midwayfrontend",
+    "server": "npm run dev --prefix midwaybackend",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JonathanCen/MidWay.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JonathanCen/MidWay/issues"
+  },
+  "homepage": "https://github.com/JonathanCen/MidWay#readme",
+  "dependencies": {
+    "concurrently": "^7.2.2"
+  }
+}
