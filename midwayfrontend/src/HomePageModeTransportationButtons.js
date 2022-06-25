@@ -7,12 +7,16 @@ import DirectionsTransitIcon from "@mui/icons-material/DirectionsTransit";
 import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
 import FlightIcon from "@mui/icons-material/Flight";
 
-const HomePageModeTransportationButtons = () => {
+const HomePageModeTransportationButtons = (props) => {
   const [modeTransportation, setModeTransportation] = useState("Walking");
 
   const changeModeTransportation = (e, newTransportation) => {
     if (newTransportation !== null) {
+      // Update component state
       setModeTransportation(newTransportation);
+
+      // Update parent's form state
+      props.onButtonChange(newTransportation);
     }
   };
 
