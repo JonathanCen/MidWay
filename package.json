@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/JonathanCen/MidWay#readme",
   "dependencies": {
-    "concurrently": "^7.2.2"
+    "concurrently": "^7.2.2",
+    "react-google-places-autocomplete": "^3.3.4"
   }
 }

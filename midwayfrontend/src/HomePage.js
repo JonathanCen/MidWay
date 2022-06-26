@@ -18,6 +18,11 @@ const emptyFormValues = {
 }
 
 const HomePage = () => {
+  const [firstAddress, setFirstAddress] = useState('');
+  const [secondAddress, setSecondAddress] = useState('');
+  const [activity, setActivity] = useState('');
+  const [modeTransportation, setModeTransportation] = useState('Walking');
+
   const [loading, setLoading] = useState(false);
   const [imageURL, setImageURL] = useState(null);
   const [formValues, setFormValues] = useState(emptyFormValues)
@@ -39,40 +44,38 @@ const HomePage = () => {
   }, []);
 
   const handleFirstLocationUpdate = (location) => {
-    setFormValues({
-      ...formValues,
-      firstAddress: location
-    });
+    setFirstAddress(location);
   }
 
   const handleSecondLocationUpdate = (location) => {
-    setFormValues({
-      ...formValues,
-      secondAddress: location
-    });
+    setSecondAddress(location);
   }
 
   const handleActivityUpdate = (activity) => {
-    setFormValues({
-      ...formValues,
-      activity: activity
-    });
+    setActivity(activity);
   }
 
   const handleTransportationUpdate = (transportation) => {
-    setFormValues({
-      ...formValues,
-      modeTransportation: transportation
-    });
+    setModeTransportation(transportation);
   }
 
   const handleSubmit = (e) => {
+    console.log(e);
+    const formValues = {
+      firstAddress: firstAddress,
+      secondAddress: secondAddress,
+      activity: activity,
+      modeTransportation: modeTransportation
+    };
+
     e.preventDefault();
+
     // Display loading animation on button
     setLoading(true);
 
     // Perform a fetch request
     console.log(formValues);
+    setLoading(false);
   }
 
   return (
@@ -81,9 +84,9 @@ const HomePage = () => {
       {/* <div id="home-page-body-wrapper"> */}
 
       <div id="home-page-body" style={{ backgroundImage: `url(${imageURL})` }}>
-        <HomePageHeader />
+        <HomePageHeader/>
         <Item id="hope-page-form-outline">
-          <form onSubmit={handleSubmit}>
+          <form  onSubmit={handleSubmit}>
             <Grid container direction="column" justifyContent="center" alignItems="center" rowSpacing={3} >
               <Grid item sx={{ width: "100%" }}>
                 <div id="home-page-form-title">
@@ -104,12 +107,12 @@ const HomePage = () => {
               </Grid>
               <Grid item sx={{ width: "100%" }}>
                 <LoadingButton
-                  // onClick={handleClick}
+                  // onClick={handleSubmit}
+                  type="submit"
                   endIcon={<TravelExploreTwoToneIcon />}
                   loading={loading}
                   loadingPosition="end"
                   variant="outlined"
-                  type="submit"
                   size="large"
                   sx={{ width: "100%" }}
                 >
