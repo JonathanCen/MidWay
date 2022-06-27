@@ -20,6 +20,14 @@ const HomePage = () => {
 
   const [loading, setLoading] = useState(false);
   const [imageURL, setImageURL] = useState(null);
+
+  // Ensure that the address the users selected are valid addresses in google maps
+  const [submitButtonPressed, setSubmitButtonPressed] = useState(false);
+  const [isValidFirstAddress, setIsValidFirstAddress] = useState(false);
+  const [isValidSecondAddress, setIsValidSecondAddress] = useState(false);
+
+  const helperText = []
+
   const useDefaultBackground = true;
 
   useEffect(() => {
@@ -37,6 +45,9 @@ const HomePage = () => {
     }
   }, []);
 
+  /*
+   * Event handlers when user types into the input boxes
+   */
   const handleFirstLocationUpdate = (location) => {
     setFirstAddress(location);
   }
@@ -53,8 +64,39 @@ const HomePage = () => {
     setModeTransportation(transportation);
   }
 
+  /*
+   * Event handlers when user selects a dropdown; using this to ensure that the user's input is a valid address.
+   */
+  const handleFirstLocationSelect = (bool) => {
+    setIsValidFirstAddress(bool);
+  }
+ 
+  const handleSecondLocationSelect = (bool) => {
+    setIsValidSecondAddress(bool);
+  }
+
+  // Returns whether the locations are valid
+  const validateLocations = () => {
+    return isValidFirstAddress && isValidSecondAddress;
+  }
+
+  const getStatus = (isValidAddress) => {
+    return submitButtonPressed && !isValidAddress ? 1 : submitButtonPressed && isValidAddress ? 2 : 0;
+  }
+
+  const generateHelperText = (isValidAddress, position) => {
+    let helperText = `Enter your ${position} location.`;
+
+    if (submitButtonPressed && !isValidAddress) {
+      helperText = "Please select a valid address from the dropdown."
+    } else if (submitButtonPressed && isValidAddress) {
+      helperText = "Correct selected a valid address."
+    }
+
+    return helperText;
+  }
+
   const handleSubmit = (e) => {
-    console.log(e);
     const formValues = {
       firstAddress: firstAddress,
       secondAddress: secondAddress,
@@ -62,7 +104,18 @@ const HomePage = () => {
       modeTransportation: modeTransportation
     };
 
+    // Ensure that the page doesn't refresh
     e.preventDefault();
+
+    // Check the user selected valid addresses for both addresses 
+    const isValidLocations = validateLocations();
+    setSubmitButtonPressed(true);
+
+    // If one of the location is not valid, then just return
+    if (!isValidLocations) {
+      console.log("location is not valid, ", isValidFirstAddress, isValidSecondAddress);
+      return ;
+    }
 
     // Display loading animation on button
     setLoading(true);
@@ -88,14 +141,14 @@ const HomePage = () => {
                 </div>
               </Grid>
               <Grid item sx={{ width: "100%" }}>
-                <HomePageAddressInput required={true} id="input-address-one" label="First Starting Location" helperText="Enter your first location." onTextChange={handleFirstLocationUpdate}/>
+                <HomePageAddressInput statusCode={getStatus(isValidFirstAddress)} required={true} id="input-address-one" label="First Starting Location" helperText={generateHelperText(isValidFirstAddress, 'first')} onTextChange={handleFirstLocationUpdate} onSelectDropDown={handleFirstLocationSelect}/>
               </Grid>
               <Grid item sx={{ width: "100%" }}>
-                <HomePageAddressInput required={true} id="input-address-two" label="Second Starting Location" helperText="Enter your second location." onTextChange={handleSecondLocationUpdate}/>
+                <HomePageAddressInput statusCode={getStatus(isValidSecondAddress)} required={true} id="input-address-two" label="Second Starting Location" helperText={generateHelperText(isValidSecondAddress, 'second')} onTextChange={handleSecondLocationUpdate} onSelectDropDown={handleSecondLocationSelect}/>
               </Grid>
               <Grid item sx={{ width: "100%" }}>
-                <HomePageActivitySelect id="select-activity" label="Activity (Optional)" helperText="Enter an activity of your choice." onNewSelect={handleActivityUpdate} />
-                {/* <HomePageActivityInput id="select-activity" label="Activity (Optional)" helperText="Enter an activity of your choice." onNewSelect={handleActivityUpdate} /> */}
+                <HomePageActivitySelect statusCode={submitButtonPressed} id="select-activity" label="Activity (Optional)" helperText="Enter an activity of your choice." onNewSelect={handleActivityUpdate} />
+                {/* <HomePageActivityInput statusCode={submitButtonPressed} id="select-activity" label="Activity (Optional)" helperText="Enter an activity of your choice." onNewSelect={handleActivityUpdate} /> */}
               </Grid>
               <Grid item sx={{ width: "100%" }}>
                 <HomePageModeTransportationButtons onButtonChange={handleTransportationUpdate}/>

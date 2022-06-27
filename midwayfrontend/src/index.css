@@ -205,7 +205,7 @@ h1 {
   font-weight: 400;
 }
 
-.pac-icon {
+.pac-icon, .pac-item-selected>.pac-icon {
   /* background-image: url("../public/map-pin-solid.svg"); */
   background: url("../public/map-pin-solid.svg");
   background-repeat: no-repeat;
@@ -217,9 +217,8 @@ h1 {
   background-color: #eff5fb;
 }
 
-.pac-container:after {
-  /* Disclaimer: not needed to show 'powered by Google' if also a Google Map is shown */
 
+.pac-container:after {
   background-image: none !important;
   height: 0px;
 }
