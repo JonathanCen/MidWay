@@ -1,16 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
-import TextField from "@mui/material/TextField";
-
 import FormHelperText from '@mui/material/FormHelperText';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
-
 import AddLocationAltTwoToneIcon from '@mui/icons-material/AddLocationAltTwoTone';
-import CelebrationTwoToneIcon from '@mui/icons-material/CelebrationTwoTone';
 
-const HomePageTextField = (props) => {
+const HomePageAddressInput = (props) => {
   const { id, label, helperText, required } = props;
   const [address, setAddress] = useState("");
   const inputRef = useRef(null);
@@ -48,22 +44,12 @@ const HomePageTextField = (props) => {
 
 
   return (
-      //   <FormControl>
-      //   <InputLabel htmlFor="component-outlined">Name</InputLabel>
-      //   <OutlinedInput
-      //     id="component-outlined"
-      //     // value={name}
-      //     // onChange={handleChange}
-      //     label="Name"
-      //   />
-      // </FormControl>
-
     <FormControl id={id}>
         <InputLabel htmlFor={id}>{label}</InputLabel>
         <OutlinedInput
           startAdornment={
             <InputAdornment position="start">
-              {label.includes("Location") ? <AddLocationAltTwoToneIcon /> : <CelebrationTwoToneIcon /> }
+              <AddLocationAltTwoToneIcon />
             </InputAdornment>
           }
           inputRef={inputRef}
@@ -79,20 +65,7 @@ const HomePageTextField = (props) => {
         </FormHelperText>
     </FormControl>
 
-
-    // <TextField
-    //   required={props.required}
-    //   id={props.id}
-    //   label={props.label}
-    //   inputRef={inputRef}
-    //   // size="small"
-    //   sx={{
-    //     font: "Anek Latin",
-    //   }}
-    //   // variant="standard"
-    //   fullWidth
-    // />
   );
 }
 
-export default HomePageTextField;
+export default HomePageAddressInput;

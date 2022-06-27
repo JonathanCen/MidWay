@@ -77,7 +77,7 @@ h1 {
   padding: 5px;
 }
 
-#textfield-address-one, #textfield-address-two, #textfield-activity {
+#input-address-one, #input-address-two, #select-activity {
   width: 100%;
 }
 
@@ -180,6 +180,49 @@ h1 {
 /* .MuiButtonBase-root.MuiToggleButton-root.Mui-selected.MuiToggleButton-sizeMedium.MuiToggleButton-standard.MuiToggleButtonGroup-grouped.MuiToggleButtonGroup-groupedHorizontal:hover {
   background-color: #a3c3e3e8;
 } */
+
+/* Google place API autocomplete */
+.pac-container {
+  font-family: "Roboto", Arial, sans-serif;
+  text-align: center;
+  width: 100%;
+}
+
+.pac-matched {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.pac-item-query {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.pac-item {
+  font-size: 14px;
+  height: 50px;
+  line-height: 50px;
+  font-weight: 400;
+}
+
+.pac-icon {
+  /* background-image: url("../public/map-pin-solid.svg"); */
+  background: url("../public/map-pin-solid.svg");
+  background-repeat: no-repeat;
+  background-size: auto;
+  margin: 15px 10px 0 10px;
+}
+
+.pac-item:hover {
+  background-color: #eff5fb;
+}
+
+.pac-container:after {
+  /* Disclaimer: not needed to show 'powered by Google' if also a Google Map is shown */
+
+  background-image: none !important;
+  height: 0px;
+}
 
 /* Page Not Found CSS */
 #page-not-found-heading,

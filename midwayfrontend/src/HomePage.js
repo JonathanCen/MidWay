@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { getBackgroundImagePromise } from "./utils";
 import Grid from "@mui/material/Grid";
-import HomePageTextField from "./HomePageTextField";
+import HomePageAddressInput from "./HomePageAddressInput";
+import HomePageActivitySelect from "./HomePageActivitySelect";
 import Item from "./Item";
 import HomePageModeTransportationButtons from "./HomePageModeTransportationButtons";
 import HomePageHeader from "./HomePageHeader";
@@ -9,13 +10,6 @@ import HomePageFooter from "./HomePageFooter";
 import LoadingButton from '@mui/lab/LoadingButton';
 import TravelExploreTwoToneIcon from '@mui/icons-material/TravelExploreTwoTone';
 
-
-const emptyFormValues = {
-  firstAddress: "",
-  secondAddress: "",
-  activity: "",
-  modeTransportation: "Walking",
-}
 
 const HomePage = () => {
   const [firstAddress, setFirstAddress] = useState('');
@@ -25,7 +19,6 @@ const HomePage = () => {
 
   const [loading, setLoading] = useState(false);
   const [imageURL, setImageURL] = useState(null);
-  const [formValues, setFormValues] = useState(emptyFormValues)
   const useDefaultBackground = true;
 
   useEffect(() => {
@@ -94,13 +87,13 @@ const HomePage = () => {
                 </div>
               </Grid>
               <Grid item sx={{ width: "100%" }}>
-                <HomePageTextField required={true} id="textfield-address-one" label="First Starting Location" helperText="Enter your first location." onTextChange={handleFirstLocationUpdate}/>
+                <HomePageAddressInput required={true} id="input-address-one" label="First Starting Location" helperText="Enter your first location." onTextChange={handleFirstLocationUpdate}/>
               </Grid>
               <Grid item sx={{ width: "100%" }}>
-                <HomePageTextField required={true} id="textfield-address-two" label="Second Starting Location" helperText="Enter your second location." onTextChange={handleSecondLocationUpdate}/>
+                <HomePageAddressInput required={true} id="input-address-two" label="Second Starting Location" helperText="Enter your second location." onTextChange={handleSecondLocationUpdate}/>
               </Grid>
               <Grid item sx={{ width: "100%" }}>
-                <HomePageTextField id="textfield-activity" label="Activity (Optional)" helperText="Enter an activity of your choice." onTextChange={handleActivityUpdate} />
+                <HomePageActivitySelect id="select-activity" label="Activity (Optional)" helperText="Enter an activity of your choice." onNewSelect={handleActivityUpdate} />
               </Grid>
               <Grid item sx={{ width: "100%" }}>
                 <HomePageModeTransportationButtons onButtonChange={handleTransportationUpdate}/>
