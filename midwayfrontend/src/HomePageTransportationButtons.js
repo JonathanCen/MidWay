@@ -7,13 +7,13 @@ import DirectionsTransitIcon from "@mui/icons-material/DirectionsTransit";
 import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
 import FlightIcon from "@mui/icons-material/Flight";
 
-const HomePageModeTransportationButtons = (props) => {
-  const [modeTransportation, setModeTransportation] = useState("Walking");
+const HomePageTransportationButtons = (props) => {
+  const [transportation, setTransportation] = useState("Walking");
 
-  const changeModeTransportation = (e, newTransportation) => {
+  const changeTransportation = (e, newTransportation) => {
     if (newTransportation !== null) {
       // Update component state
-      setModeTransportation(newTransportation);
+      setTransportation(newTransportation);
 
       // Update parent's form state
       props.onButtonChange(newTransportation);
@@ -24,10 +24,10 @@ const HomePageModeTransportationButtons = (props) => {
     <React.Fragment>
       <div id="transportation-label">Mode of Transportation:</div>
       <ToggleButtonGroup
-        value={modeTransportation}
+        value={transportation}
         exclusive
         color="primary"
-        onChange={changeModeTransportation}
+        onChange={changeTransportation}
         sx={{
           width: "100%",
           justifyContent: "center",
@@ -53,4 +53,4 @@ const HomePageModeTransportationButtons = (props) => {
   )
 }
 
-export default HomePageModeTransportationButtons;
+export default HomePageTransportationButtons;

@@ -2,21 +2,21 @@ import React, { useState, useEffect } from "react";
 import { getBackgroundImagePromise } from "./utils";
 import Grid from "@mui/material/Grid";
 import Item from "./Item";
-import LoadingButton from '@mui/lab/LoadingButton';
-import TravelExploreTwoToneIcon from '@mui/icons-material/TravelExploreTwoTone';
+
 
 import HomePageHeader from "./HomePageHeader";
 import HomePageActivityInput from "./HomePageActivityInput";
-import HomePageModeTransportationButtons from "./HomePageModeTransportationButtons";
+import HomePageTransportationButtons from "./HomePageTransportationButtons";
 import HomePageAddressInput from "./HomePageAddressInput";
 import HomePageActivitySelect from "./HomePageActivitySelect";
 import HomePageFooter from "./HomePageFooter";
+import HomePageFormButton from "./HomePageFormButton";
 
 const HomePage = () => {
   const [firstAddress, setFirstAddress] = useState('');
   const [secondAddress, setSecondAddress] = useState('');
   const [activity, setActivity] = useState('');
-  const [modeTransportation, setModeTransportation] = useState('Walking');
+  const [transportation, setTransportation] = useState('Walking');
 
   const [loading, setLoading] = useState(false);
   const [imageURL, setImageURL] = useState(null);
@@ -61,7 +61,7 @@ const HomePage = () => {
   }
 
   const handleTransportationUpdate = (transportation) => {
-    setModeTransportation(transportation);
+    setTransportation(transportation);
   }
 
   /*
@@ -101,7 +101,7 @@ const HomePage = () => {
       firstAddress: firstAddress,
       secondAddress: secondAddress,
       activity: activity,
-      modeTransportation: modeTransportation
+      transportation: transportation
     };
 
     // Ensure that the page doesn't refresh
@@ -113,7 +113,6 @@ const HomePage = () => {
 
     // If one of the location is not valid, then just return
     if (!isValidLocations) {
-      console.log("location is not valid, ", isValidFirstAddress, isValidSecondAddress);
       return ;
     }
 
@@ -122,7 +121,23 @@ const HomePage = () => {
 
     // Perform a fetch request
     console.log(formValues);
+    const serverURL = process.env.REACT_APP_SERVER_URL || "http://localhost:5000/";
+    const url = serverURL + `find-locations/firstAddress=${firstAddress}/secondAddress=${secondAddress}/activity=${activity}/transportation=${transportation}`;
+    console.log("fetching data from ", url);
+
+    fetch(url)
+      .then(response => {
+        console.log(response);
+        response.json()
+          .then(data => console.log(`data: ${data}`))
+          .catch(err => console.log(`error: ${err}`));
+      })
+      .catch(err => console.log(`error : ${err}`));
+
+    // Display regular button
     setLoading(false);
+
+    // Redirect to new page
   }
 
   return (
@@ -151,21 +166,10 @@ const HomePage = () => {
                 {/* <HomePageActivityInput statusCode={submitButtonPressed} id="select-activity" label="Activity (Optional)" helperText="Enter an activity of your choice." onNewSelect={handleActivityUpdate} /> */}
               </Grid>
               <Grid item sx={{ width: "100%" }}>
-                <HomePageModeTransportationButtons onButtonChange={handleTransportationUpdate}/>
+                <HomePageTransportationButtons onButtonChange={handleTransportationUpdate}/>
               </Grid>
               <Grid item sx={{ width: "100%" }}>
-                <LoadingButton
-                  // onClick={handleSubmit}
-                  type="submit"
-                  endIcon={<TravelExploreTwoToneIcon />}
-                  loading={loading}
-                  loadingPosition="end"
-                  variant="outlined"
-                  size="large"
-                  sx={{ width: "100%" }}
-                >
-                  {loading ? 'Finding Locations' : 'Find Meeting Locations'}
-                </LoadingButton>
+                <HomePageFormButton isLoading={loading}/>
               </Grid>
             </Grid>
           </form>

@@ -8,7 +8,6 @@ import AddLocationAltTwoToneIcon from '@mui/icons-material/AddLocationAltTwoTone
 
 const HomePageAddressInput = (props) => {
   const { id, label, helperText, required, statusCode } = props;
-  console.log(statusCode);
   const [address, setAddress] = useState("");
   const inputRef = useRef(null);
 
@@ -25,7 +24,6 @@ const HomePageAddressInput = (props) => {
   // Handles when user selects a location from autocomplete options
   const handlePlaceSelect = async () => {
     const place = autoComplete.getPlace();
-    console.log(place);
     if (place.formatted_address !== undefined) {
       setAddress(place.formatted_address);
       props.onTextChange(place.formatted_address);
