@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { getBackgroundImagePromise } from "./utils";
 import Grid from "@mui/material/Grid";
-import HomePageAddressInput from "./HomePageAddressInput";
-import HomePageActivitySelect from "./HomePageActivitySelect";
 import Item from "./Item";
-import HomePageModeTransportationButtons from "./HomePageModeTransportationButtons";
-import HomePageHeader from "./HomePageHeader";
-import HomePageFooter from "./HomePageFooter";
 import LoadingButton from '@mui/lab/LoadingButton';
 import TravelExploreTwoToneIcon from '@mui/icons-material/TravelExploreTwoTone';
 
+import HomePageHeader from "./HomePageHeader";
+import HomePageActivityInput from "./HomePageActivityInput";
+import HomePageModeTransportationButtons from "./HomePageModeTransportationButtons";
+import HomePageAddressInput from "./HomePageAddressInput";
+import HomePageActivitySelect from "./HomePageActivitySelect";
+import HomePageFooter from "./HomePageFooter";
 
 const HomePage = () => {
   const [firstAddress, setFirstAddress] = useState('');
@@ -94,6 +95,7 @@ const HomePage = () => {
               </Grid>
               <Grid item sx={{ width: "100%" }}>
                 <HomePageActivitySelect id="select-activity" label="Activity (Optional)" helperText="Enter an activity of your choice." onNewSelect={handleActivityUpdate} />
+                {/* <HomePageActivityInput id="select-activity" label="Activity (Optional)" helperText="Enter an activity of your choice." onNewSelect={handleActivityUpdate} /> */}
               </Grid>
               <Grid item sx={{ width: "100%" }}>
                 <HomePageModeTransportationButtons onButtonChange={handleTransportationUpdate}/>
