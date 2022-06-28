@@ -4,8 +4,10 @@ const validateURL = require('./middleware/validateURL');
 const setResponseHeaders = require('./middleware/setResponseHeaders');
 
 // define the  
-router.get('/firstAddress=:firstAddress/secondAddress=:secondAddress/activity=:activity/transportation=:transportation', validateURL, setResponseHeaders, (req, res) => {
+router.get('/firstAddress=:firstAddress/secondAddress=:secondAddress/activity=:activity/transportation=:transportation', setResponseHeaders, validateURL,  (req, res) => {
   // console.log(req);
+  res.status(200);
+  res.json({message: 'Valid request!', requestBody: req.params});
 });
 
 router.get('*', setResponseHeaders, (req, res) => {

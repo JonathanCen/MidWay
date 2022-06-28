@@ -1,16 +1,47 @@
+const { fetchGeocoding } = require('../utils');
 
+// Choices for the users
+const listOfActivities = ["Any", "Arts & Entertainment", "Beauty & Spas", "Food", "Hotels & Travel", "Nightlife", "Restaurants", "Shopping"];
+const listOfTransportation = ["Driving", "Transit", "Walking", "Cycling", "Flights"];
 
 // Validates address using Google Geocoding API
-const validateAddress = (address, invalidFields) => {
-
+const validateAddress = async (address, invalidFields, isFirstAddress=true) => {
+  const geocodingResponse = await fetchGeocoding(address);
+  if (geocodingResponse.data.status !== 'OK') {
+    invalidFields.push(isFirstAddress ? 'firstAddress' : 'secondAddress');
+    return false;
+  }
   return true;
 }
 
+// Validates that the activity is within the list of activities
 const validateActivity = (activity, invalidFields) => {
+  const lowerListOfActivities = listOfActivities.map((activity) => activity.toLowerCase());
+  const lowerActivity = activity.toLowerCase();
+  if (!lowerListOfActivities.includes(lowerActivity)) {
+    invalidFields.push('activity');
+    return false;
+  }
   return true;
 }
 
+// Validates that the activity is not an empty string
+const validateActivityNotEmpty = (activity, invalidFields) => {
+  if (activity === '') {
+    invalidFields.push('activity');
+    return false;
+  }
+  return true;
+}
+
+// Validates that the transportation is not an empty string
 const validateTransportation = (transportation, invalidFields) => {
+  const lowerListOfTransportation = listOfTransportation.map((transit) => transit.toLowerCase());
+  const lowerTransportation = transportation.toLowerCase();
+  if (!lowerListOfTransportation.includes(lowerTransportation)) {
+    invalidFields.push('transportation');
+    return false;
+  }
   return true;
 }
 
@@ -19,20 +50,26 @@ const validateTransportation = (transportation, invalidFields) => {
 const validateURL = (req, res, next) => {
   const { firstAddress, secondAddress, activity, transportation } = req.params; 
 
+  // Store all the invalid fields when validating
   const invalidFields = [];
-  const isValid = validateAddress(firstAddress, invalidFields) 
-    && validateAddress(secondAddress, invalidFields) 
-    && validateActivity(activity, invalidFields) 
-    && validateTransportation(transportation, invalidFields);
+
+  // Validate each field
+  const isValidFirstAddress = validateAddress(firstAddress, invalidFields);
+  const isValidSecondAddress = validateAddress(secondAddress, invalidFields, false);
+  const isValidActivity = validateActivity(activity, invalidFields);
+  const isValidTransportation = validateTransportation(transportation, invalidFields);
+
+  // Is only valid if all checks return true
+  const isValid = isValidFirstAddress && isValidSecondAddress && isValidActivity && isValidTransportation;
   
-  // Check whether the inputs are valid
+  // Check whether the inputs are valid, if not sends a 406: not acceptable response
+  // Otherwise the request is valid, so continue onto the next middleware
   if (!isValid) {
-    res.send(406, `One of the field are not valid. Please check again the following fields : ${invalidFields}`);
-    res.connection.destroy();
+    res.status(406);
+    res.json({message: `One of the field are not valid. Please check again the following fields : ${invalidFields}`});
+  } else {
+    next();
   }
-
-
-  next();
 }
 
 module.exports = validateURL;

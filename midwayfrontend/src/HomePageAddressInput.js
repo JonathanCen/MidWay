@@ -31,6 +31,7 @@ const HomePageAddressInput = (props) => {
     }
   }
 
+  // Checkout documentation
   useEffect(() => {
     // Hook the textboxes to be connected to google places api
     autoComplete = new window.google.maps.places.Autocomplete(

@@ -5,7 +5,7 @@ import Item from "./Item";
 
 
 import HomePageHeader from "./HomePageHeader";
-import HomePageActivityInput from "./HomePageActivityInput";
+// import HomePageActivityInput from "./HomePageActivityInput";
 import HomePageTransportationButtons from "./HomePageTransportationButtons";
 import HomePageAddressInput from "./HomePageAddressInput";
 import HomePageActivitySelect from "./HomePageActivitySelect";
@@ -15,7 +15,7 @@ import HomePageFormButton from "./HomePageFormButton";
 const HomePage = () => {
   const [firstAddress, setFirstAddress] = useState('');
   const [secondAddress, setSecondAddress] = useState('');
-  const [activity, setActivity] = useState('');
+  const [activity, setActivity] = useState('Any');
   const [transportation, setTransportation] = useState('Walking');
 
   const [loading, setLoading] = useState(false);
@@ -25,9 +25,6 @@ const HomePage = () => {
   const [submitButtonPressed, setSubmitButtonPressed] = useState(false);
   const [isValidFirstAddress, setIsValidFirstAddress] = useState(false);
   const [isValidSecondAddress, setIsValidSecondAddress] = useState(false);
-
-  const helperText = []
-
   const useDefaultBackground = true;
 
   useEffect(() => {
@@ -129,10 +126,10 @@ const HomePage = () => {
       .then(response => {
         console.log(response);
         response.json()
-          .then(data => console.log(`data: ${data}`))
-          .catch(err => console.log(`error: ${err}`));
+          .then(data => {console.log(data)})
+          .catch(err => {console.log(`error parsing response json: ${err}`)});
       })
-      .catch(err => console.log(`error : ${err}`));
+      .catch(err => console.log(`error at fetching url: ${err}`));
 
     // Display regular button
     setLoading(false);
