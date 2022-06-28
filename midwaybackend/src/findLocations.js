@@ -5,7 +5,13 @@ const setResponseHeaders = require('./middleware/setResponseHeaders');
 
 // define the  
 router.get('/firstAddress=:firstAddress/secondAddress=:secondAddress/activity=:activity/transportation=:transportation', setResponseHeaders, validateURL,  (req, res) => {
-  // console.log(req);
+  // Calculate midpoint from the two locations w/ Google API
+  
+
+  // Find places based on their activity w/ Yelp API
+
+
+  // Send results back to user
   res.status(200);
   res.json({message: 'Valid request!', requestBody: req.params});
 });

@@ -1,7 +1,12 @@
 const express = require('express');
 const app = express();
-const setResponseHeaders = require('./src/middleware/validateURL');
+const axios = require('axios');
 const findLocations = require('./src/findLocations');
+const setResponseHeaders = require('./src/middleware/setResponseHeaders');
+
+const googelMapsAPI = require('@googlemaps/google-maps-services-js');
+const util = require('@googlemaps/google-maps-services-js/dist/util');
+const { Client } = require('@googlemaps/google-maps-services-js');
 
 require('dotenv').config();
 
@@ -14,11 +19,63 @@ app.get('/testingAPICall', (req, res) => {
   res.json({ "message": "Hi from the backend!" });
 });
 
+
 app.use('/find-locations', findLocations);
+
+const generatePaths = (steps) => {
+  const paths = []
+  for (let { polyline } of steps) {
+    paths.push(util.decodePath(polyline.points));
+  }
+  return paths;
+}
+
+const calculateDuration = (legs) => {
+  const givenDuration = legs.duration.value;
+  const estimatedMidPoint = Math.floor(givenDuration / 2);
+  console.log(`Given Duration: ${givenDuration}. EstimatedMidPoint: ${estimatedMidPoint}`);
+  const steps = legs.steps;
+  let runningDuration = 0, stepsIndex = 0;
+  while (runningDuration + steps[stepsIndex].duration.value < estimatedMidPoint) {
+    runningDuration += steps[stepsIndex].duration.value;
+    stepsIndex += 1;
+  }
+  console.log(`runningDuration: ${runningDuration}, next duration: ${steps[stepsIndex].duration.value}`);
+  console.log('Points:')
+  const paths = util.decodePath(steps[stepsIndex].polyline.points);
+  const durationOfEachPoint = steps[stepsIndex].duration.value / paths.length;
+  const leftOverDuration = estimatedMidPoint - runningDuration;
+  const numSteps = Math.floor(leftOverDuration/durationOfEachPoint)-1;
+  console.log(durationOfEachPoint, leftOverDuration, numSteps);
+  console.log(paths[numSteps]);
+  console.log(paths[numSteps+1]);
+  return paths;
+}
+
+app.get('/testingGoogleAPI', setResponseHeaders, async (req, res) => {
+
+  let config = {params: {
+    origin: "Toronto",
+    destination: "Montreal",
+    key: process.env.GOOGLE_MAPS_API_KEY
+  }};
+
+  const client = new Client({});
+  const response = await client.directions(config)
+    .then(response => response)
+    .catch(error => console.log(error));
+  const responseData = await response.data;
+  // const paths = generatePaths(await response.data.routes[0].legs[0].steps); 
+  const paths = calculateDuration(await response.data.routes[0].legs[0]);
+  
+  res.status(200);
+  res.json({paths: paths, responseData: responseData});
+});
+
 
 app.get('/', setResponseHeaders, (req, res) => {
   res.json("Welcome to MidWay server!");
-})
+});
 
 app.get('*', setResponseHeaders, (req, res) => {
   res.status(404);
@@ -28,4 +85,3 @@ app.get('*', setResponseHeaders, (req, res) => {
 app.listen(5000, () => {
   console.log("Server started on port 5000.");
 });
-url: "http://localhost:5000/find-locations/firstAddress=Fulton%20St,%20New%20York,%20NY,%20USA/secondAddress=Ditmars%20Blvd,%20Queens,%20NY,%20USA/activity=/transportation=Flights"

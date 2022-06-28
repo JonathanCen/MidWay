@@ -4,11 +4,24 @@ const { fetchGeocoding } = require('../utils');
 const listOfActivities = ["Any", "Arts & Entertainment", "Beauty & Spas", "Food", "Hotels & Travel", "Nightlife", "Restaurants", "Shopping"];
 const listOfTransportation = ["Driving", "Transit", "Walking", "Cycling", "Flights"];
 
+// Validates that the field is not an empty string
+const validateNotUndefined = (field, fieldString, invalidFields) => {
+  if (field === undefined) {
+    invalidFields.push(fieldString);
+    return false;
+  }
+  return true;
+}
+
 // Validates address using Google Geocoding API
 const validateAddress = async (address, invalidFields, isFirstAddress=true) => {
+  const addressString = isFirstAddress ? 'firstAddress' : 'secondAddress';
+  if (!validateNotUndefined(address, addressString, invalidFields)) {
+    return false;
+  }
   const geocodingResponse = await fetchGeocoding(address);
   if (geocodingResponse.data.status !== 'OK') {
-    invalidFields.push(isFirstAddress ? 'firstAddress' : 'secondAddress');
+    invalidFields.push(addressString);
     return false;
   }
   return true;
@@ -16,7 +29,10 @@ const validateAddress = async (address, invalidFields, isFirstAddress=true) => {
 
 // Validates that the activity is within the list of activities
 const validateActivity = (activity, invalidFields) => {
-  const lowerListOfActivities = listOfActivities.map((activity) => activity.toLowerCase());
+  if (!validateNotUndefined(activity, 'activity', invalidFields)) {
+    return false;
+  }
+  const lowerListOfActivities = listOfActivities.map((activities) => activities.toLowerCase());
   const lowerActivity = activity.toLowerCase();
   if (!lowerListOfActivities.includes(lowerActivity)) {
     invalidFields.push('activity');
@@ -26,7 +42,7 @@ const validateActivity = (activity, invalidFields) => {
 }
 
 // Validates that the activity is not an empty string
-const validateActivityNotEmpty = (activity, invalidFields) => {
+const validateNotEmpty = (activity, invalidFields) => {
   if (activity === '') {
     invalidFields.push('activity');
     return false;
@@ -36,6 +52,9 @@ const validateActivityNotEmpty = (activity, invalidFields) => {
 
 // Validates that the transportation is not an empty string
 const validateTransportation = (transportation, invalidFields) => {
+  if (!validateNotUndefined(transportation, 'transportation', invalidFields)) {
+    return false;
+  }
   const lowerListOfTransportation = listOfTransportation.map((transit) => transit.toLowerCase());
   const lowerTransportation = transportation.toLowerCase();
   if (!lowerListOfTransportation.includes(lowerTransportation)) {
@@ -54,6 +73,7 @@ const validateURL = (req, res, next) => {
   const invalidFields = [];
 
   // Validate each field
+  console.log(`ValidatingURL`);
   const isValidFirstAddress = validateAddress(firstAddress, invalidFields);
   const isValidSecondAddress = validateAddress(secondAddress, invalidFields, false);
   const isValidActivity = validateActivity(activity, invalidFields);
