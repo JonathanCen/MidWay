@@ -15,17 +15,24 @@ const validateNotUndefined = (field, fieldString, invalidFields) => {
 
 // Validates address using Google Geocoding API
 const validateAddress = async (address, invalidFields, isFirstAddress=true) => {
-  const addressString = isFirstAddress ? 'firstAddress' : 'secondAddress';
-  if (!validateNotUndefined(address, addressString, invalidFields)) {
+  try {
+    const addressString = isFirstAddress ? 'firstAddress' : 'secondAddress';
+    if (!validateNotUndefined(address, addressString, invalidFields)) {
+      return false;
+    }
+    const geocodingResponse = await fetchGeocoding(address);
+    if (geocodingResponse.data.status !== 'OK') {
+      invalidFields.push(addressString);
+      return false;
+    }
+    return true;
+  } catch(err) {
+    console.log(`Error: ${err}`)
     return false;
   }
-  const geocodingResponse = await fetchGeocoding(address);
-  if (geocodingResponse.data.status !== 'OK') {
-    invalidFields.push(addressString);
-    return false;
-  }
-  return true;
 }
+
+//https://maps.googleapis.com/maps/api/geocode/json?address=122%20Chemin%20de%20Montr%C3%A9al%20O,%20Gatineau,%20QC%20J8M%201P4,%20Canada&key=AIzaSyAr57P4SFP6hdgap9hqfa31X7eyJ5RTwAQ
 
 // Validates that the activity is within the list of activities
 const validateActivity = (activity, invalidFields) => {
@@ -66,18 +73,19 @@ const validateTransportation = (transportation, invalidFields) => {
 
 
 // Checks to ensure that the url has valid address and activity
-const validateParams = (req, res, next) => {
+const validateParams = async (req, res, next) =>  {
   const { firstAddress, secondAddress, activity, transportation } = req.params; 
 
   // Store all the invalid fields when validating
   const invalidFields = [];
 
   // Validate each field
-  const isValidFirstAddress = validateAddress(firstAddress, invalidFields);
-  const isValidSecondAddress = validateAddress(secondAddress, invalidFields, false);
+  // const isValidFirstAddress = true;
+  const isValidFirstAddress = await validateAddress(firstAddress, invalidFields);
+  const isValidSecondAddress = await validateAddress(secondAddress, invalidFields, false);
   const isValidActivity = validateActivity(activity, invalidFields);
   const isValidTransportation = validateTransportation(transportation, invalidFields);
-
+  
   // Is only valid if all checks return true
   const isValid = isValidFirstAddress && isValidSecondAddress && isValidActivity && isValidTransportation;
   

@@ -3,14 +3,11 @@ const util = require('@googlemaps/google-maps-services-js/dist/util');
 
 /*
  * Makes a request to Google Geocoding API to see if the address exists and returns a promise to the caller
+ TODO: Need to parse the address because axios does not take specail characters!
  */
 const fetchGeocoding = (address) => {
-  try {
-    const geocodeURL = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${process.env.GOOGLE_MAPS_API_KEY}`;
-    return axios.get(geocodeURL);
-  } catch (err) {
-    console.log(`Error in fetchGeocoding: ${err}`);
-  }
+  const geocodeURL = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${process.env.GOOGLE_MAPS_API_KEY}`;
+  return axios.get(geocodeURL);
 }
 
 /*
@@ -58,13 +55,13 @@ const calculateMidPoint = (googleAPIResponse) => {
 /*
  * Fetches locations near the geographic coordinates 
  */
-const fetchLocations = async (activity, geographicCoordinates) => {
+const fetchBusinesses = (activity, geographicCoordinates, offset = 10) => {
   // Configurations for Yelp graphQL request
   const yelpApiUrl = 'https://api.yelp.com/v3/graphql';
   const config = {
     headers: { Authorization: `Bearer ${process.env.YELP_API_KEY}` }
   };
-  const {lat, lng} = geographicCoordinates, offset = 10, searchRadius = 40000;
+  const {lat, lng} = geographicCoordinates, searchRadius = 40000;
 
   // graphQL query based on the provided inputa
   const graphQLQuery = `
@@ -110,13 +107,10 @@ const fetchLocations = async (activity, geographicCoordinates) => {
       }
   `; 
 
-  try {
-    // Sending a request to Yelp graphQL
-    return axios.post(yelpApiUrl, { query: graphQLQuery }, config);
-  } catch (err) {
-    console.log(`Error at fetching location. Error: ${err}`);
-    return {message: "Error at fetching location."};
-  }
+  // Sending a request to Yelp graphQL
+  return axios.post(yelpApiUrl, { query: graphQLQuery }, config);
+    // .then(res => console.log(`Fetch businesses: ${res}`))
+    // .catch(err => console.log(`Error: ${err}`));
 }
 
 
@@ -124,8 +118,24 @@ const fetchLocations = async (activity, geographicCoordinates) => {
  * Fetches near by cities based on the geographic coordinates
  */
 const fetchNearbyCities = (geographicCoordinates) => {
+  // Extract geographic coordinates
+  const { lat, lng } = geographicCoordinates;
 
+  // Axios URL & options
+  const apiURL = `https://wft-geo-db.p.rapidapi.com/v1/geo/locations/${lat}${lng}/nearbyCities`,
+    params = { 
+      radius: '100' 
+    },
+    headers = {
+      'X-RapidAPI-Key': process.env.GEODB_API_KEY,
+      'X-RapidAPI-Host': process.env.GEODO_API_HOST
+    };
+  
+  return axios.get(apiURL, {
+    params: params,
+    headers: headers
+  });
 }
 
 
-module.exports = { fetchGeocoding, calculateMidPoint, fetchLocations, fetchNearbyCities }
+module.exports = { fetchGeocoding, calculateMidPoint, fetchBusinesses, fetchNearbyCities }

@@ -131,7 +131,34 @@ app.get('/testingYelpAPI', setResponseHeaders, async (req, res) => {
     res.status(400);
     res.json({message: `Error in the server. Error: ${err}`});
   }
-})
+});
+
+app.get('/getNearbyCities', async (req, res) => {
+  const coordinates = [40.759175,-73.83878000000001];
+  const apiUrl = `https://wft-geo-db.p.rapidapi.com/v1/geo/locations/${coordinates[0]}${coordinates[1]}/nearbyCities`;
+  const params = {
+    radius: '100',
+
+  };
+  const headers = {
+    'X-RapidAPI-Key': '9403534d76msh1b3a51c5452d796p1e78f8jsn8d40a88c307b',
+    'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
+  };
+  let response = null;
+
+  try {
+    response = await axios.get(apiUrl, {
+      params: params,
+      headers: headers
+    });
+    const responseData = response.data;
+    res.status(200);
+    res.json({response: responseData});
+  } catch (err) {
+    res.status(200);
+    res.json({message: `Error: ${err}`});
+  } 
+});
 
 
 app.get('/', setResponseHeaders, (req, res) => {
