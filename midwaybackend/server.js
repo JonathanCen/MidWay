@@ -4,8 +4,8 @@ const axios = require('axios');
 const findLocations = require('./src/findLocations');
 const setResponseHeaders = require('./src/middleware/setResponseHeaders');
 
-const googelMapsAPI = require('@googlemaps/google-maps-services-js');
 const util = require('@googlemaps/google-maps-services-js/dist/util');
+const googelMapsAPI = require('@googlemaps/google-maps-services-js');
 const { Client } = require('@googlemaps/google-maps-services-js');
 
 require('dotenv').config();
@@ -42,21 +42,22 @@ const calculateDuration = (legs) => {
   }
   console.log(`runningDuration: ${runningDuration}, next duration: ${steps[stepsIndex].duration.value}`);
   console.log('Points:')
-  const paths = util.decodePath(steps[stepsIndex].polyline.points);
+  const paths = [steps[stepsIndex].start_location] + util.decodePath(steps[stepsIndex].polyline.points) + [steps[stepsIndex].end_location] ;
   const durationOfEachPoint = steps[stepsIndex].duration.value / paths.length;
   const leftOverDuration = estimatedMidPoint - runningDuration;
   const numSteps = Math.floor(leftOverDuration/durationOfEachPoint)-1;
   console.log(durationOfEachPoint, leftOverDuration, numSteps);
   console.log(paths[numSteps]);
   console.log(paths[numSteps+1]);
-  return paths;
+  return [paths[numSteps],  paths];
 }
 
 app.get('/testingGoogleAPI', setResponseHeaders, async (req, res) => {
 
   let config = {params: {
-    origin: "Toronto",
-    destination: "Montreal",
+    origin: "125-18 18th Ave, Flushing, NY 11356",
+    destination: "New York",
+    mode: "driving",
     key: process.env.GOOGLE_MAPS_API_KEY
   }};
 
@@ -65,11 +66,12 @@ app.get('/testingGoogleAPI', setResponseHeaders, async (req, res) => {
     .then(response => response)
     .catch(error => console.log(error));
   const responseData = await response.data;
+  console.log(response);
   // const paths = generatePaths(await response.data.routes[0].legs[0].steps); 
-  const paths = calculateDuration(await response.data.routes[0].legs[0]);
+  const [midpoint, paths] = calculateDuration(await response.data.routes[0].legs[0]);
   
   res.status(200);
-  res.json({paths: paths, responseData: responseData});
+  res.json({paths: paths, midpoint:midpoint, responseData: responseData});
 });
 
 

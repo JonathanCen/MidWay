@@ -66,14 +66,13 @@ const validateTransportation = (transportation, invalidFields) => {
 
 
 // Checks to ensure that the url has valid address and activity
-const validateURL = (req, res, next) => {
+const validateParams = (req, res, next) => {
   const { firstAddress, secondAddress, activity, transportation } = req.params; 
 
   // Store all the invalid fields when validating
   const invalidFields = [];
 
   // Validate each field
-  console.log(`ValidatingURL`);
   const isValidFirstAddress = validateAddress(firstAddress, invalidFields);
   const isValidSecondAddress = validateAddress(secondAddress, invalidFields, false);
   const isValidActivity = validateActivity(activity, invalidFields);
@@ -92,4 +91,4 @@ const validateURL = (req, res, next) => {
   }
 }
 
-module.exports = validateURL;
+module.exports = validateParams;
