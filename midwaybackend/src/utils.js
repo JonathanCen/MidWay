@@ -58,8 +58,65 @@ const calculateMidPoint = (googleAPIResponse) => {
 /*
  * Fetches locations near the geographic coordinates 
  */
-const fetchLocations = (geographicCoordinates) => {
+const fetchLocations = async (activity, geographicCoordinates) => {
+  // Configurations for Yelp graphQL request
+  const yelpApiUrl = 'https://api.yelp.com/v3/graphql';
+  const config = {
+    headers: { Authorization: `Bearer ${process.env.YELP_API_KEY}` }
+  };
+  const {lat, lng} = geographicCoordinates, offset = 10, searchRadius = 40000;
 
+  // graphQL query based on the provided inputa
+  const graphQLQuery = `
+      query {
+        search(term: "${activity}",
+                latitude: ${lat},
+                longitude: ${lng}
+                limit: ${offset}) {
+            business {
+                name
+                display_phone
+                review_count
+                rating
+                price
+                location {
+                  address1
+                  address2
+                  address3
+                  city
+                  state
+                  postal_code
+                  country
+                }
+                coordinates {
+                  latitude
+                  longitude
+                }
+                photos
+                hours {
+                  open {
+                    end
+                    start
+                    day
+                  }
+                }
+                reviews {
+                  text
+                  rating
+                }
+                url
+            }
+        }
+      }
+  `; 
+
+  try {
+    // Sending a request to Yelp graphQL
+    return axios.post(yelpApiUrl, { query: graphQLQuery }, config);
+  } catch (err) {
+    console.log(`Error at fetching location. Error: ${err}`);
+    return {message: "Error at fetching location."};
+  }
 }
 
 

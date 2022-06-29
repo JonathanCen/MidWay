@@ -91,29 +91,23 @@ app.get('/testingYelpAPI', setResponseHeaders, async (req, res) => {
         }
       }
   `;
-
-  // const query = 
   
+  const query = ` query Search($term: String!, $location: String!, $offset: Int!) {
+    search(term: $term,
+            location: $location,
+            limit: $offset) {
+              total
+              business {
+                name
+                url
+              }
+            }
+  }
+  `
 
-  // const axiosInstance = axios.create({
-  //   headers: {
-  //     "Authorization" : "Bearer ",
-  //     "Content-Type" : "application/graphql",
-  //   },
-  //   data : schema
-  // });
-
-  // axiosInstance.get('https://api.yelp.com/v3/graphql')
-  //   .then(res => {console.log(res.data); console.log(res)})
-  //   .catch(err => {console.log(`Error : ${err}`)});
+  const variables = {term: 'burrito', location: 'san francisco', offset: 5};
 
   const yelpApiUrl = 'https://api.yelp.com/v3/graphql';
-
-  // console.log(query);
-
-  // const client = new GraphQLClient(yelpApiUrl, {
-  //   headers: { Authorization: `Bearer ${process.env.YELP_API_KEY}`, "Content-Type" : "application/graphql" },
-  // });
 
   console.log(process.env.YELP_API_KEY)
   try {
@@ -124,7 +118,7 @@ app.get('/testingYelpAPI', setResponseHeaders, async (req, res) => {
             "business_name": "garaje-san-francisco"
         }
       };
-    console.log(schema);
+    console.log(JSON.stringify({ query, variables }));
     const response = await axios.post(yelpApiUrl, {query: schema}, {
       headers: { Authorization: `Bearer ${process.env.YELP_API_KEY}` }
     });
