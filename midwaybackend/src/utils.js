@@ -56,7 +56,7 @@ const calculateMidPoint = (googleAPIResponse) => {
 
 
 /*
- * Fetches locations near the geographicCoordinates 
+ * Fetches locations near the geographic coordinates 
  */
 const fetchLocations = (geographicCoordinates) => {
 

@@ -75,6 +75,71 @@ app.get('/testingGoogleAPI', setResponseHeaders, async (req, res) => {
 });
 
 
+
+app.get('/testingYelpAPI', setResponseHeaders, async (req, res) => {
+
+  let schema = `
+      query {
+        search(term: "burrito",
+                location: "san francisco",
+                limit: 5) {
+            total
+            business {
+                name
+                url
+            }
+        }
+      }
+  `;
+
+  // const query = 
+  
+
+  // const axiosInstance = axios.create({
+  //   headers: {
+  //     "Authorization" : "Bearer ",
+  //     "Content-Type" : "application/graphql",
+  //   },
+  //   data : schema
+  // });
+
+  // axiosInstance.get('https://api.yelp.com/v3/graphql')
+  //   .then(res => {console.log(res.data); console.log(res)})
+  //   .catch(err => {console.log(`Error : ${err}`)});
+
+  const yelpApiUrl = 'https://api.yelp.com/v3/graphql';
+
+  // console.log(query);
+
+  // const client = new GraphQLClient(yelpApiUrl, {
+  //   headers: { Authorization: `Bearer ${process.env.YELP_API_KEY}`, "Content-Type" : "application/graphql" },
+  // });
+
+  console.log(process.env.YELP_API_KEY)
+  try {
+    const config = { Authorization: `Bearer ${process.env.YELP_API_KEY}` };
+    const data = {
+        "query": "business(id garaje-san-francisco) { name id rating url }",
+        "variables": {
+            "business_name": "garaje-san-francisco"
+        }
+      };
+    console.log(schema);
+    const response = await axios.post(yelpApiUrl, {query: schema}, {
+      headers: { Authorization: `Bearer ${process.env.YELP_API_KEY}` }
+    });
+    // const data = await client.request(query, {term : "burrito", location : "san francisco", offset: 5});
+    console.log(response);
+    res.status(200);
+    res.json({message: "Hit testing Yelp API endpoint.", response: response.data});
+  } catch (err) {
+    console.log(`Error ${err}`);
+    res.status(400);
+    res.json({message: `Error in the server. Error: ${err}`});
+  }
+})
+
+
 app.get('/', setResponseHeaders, (req, res) => {
   res.json("Welcome to MidWay server!");
 });
