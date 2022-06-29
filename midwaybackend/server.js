@@ -141,8 +141,8 @@ app.get('/getNearbyCities', async (req, res) => {
 
   };
   const headers = {
-    'X-RapidAPI-Key': '9403534d76msh1b3a51c5452d796p1e78f8jsn8d40a88c307b',
-    'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
+    'X-RapidAPI-Key': process.env.GEODB_API_KEY,
+    'X-RapidAPI-Host': process.env.GEODO_API_HOST
   };
   let response = null;
 

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { calculateMidPoint, fetchBusinesses, fetchNearbyCities } = require('./utils');
+const { calculateMidPoint, fetchBusinesses, fetchNearbyCities, createSetOfSeenBusinesses, findBusinessesFromNearbyCities } = require('./utils');
 const validateParams = require('./middleware/validateParams');
 const validateTransportationFeasibility = require('./middleware/validateTransportationFeasibility');
 const setResponseHeaders = require('./middleware/setResponseHeaders');
@@ -19,39 +19,22 @@ router.get('/firstAddress=:firstAddress/secondAddress=:secondAddress/activity=:a
 
   try {
     // Find places based on their activity w/ Yelp API
-    const businessResponse = await fetchBusinesses(activity, midPointGeographicCoordinate);
+    const businessResponse = await fetchBusinesses(activity, midPointGeographicCoordinate, maxNumBusinessesToReturn);
     const businessData = businessResponse.data;
     responseBody["businesses"] = businessData;
+
+    const seenBusinesses = createSetOfSeenBusinesses(businessData);
     
     // If there are no results based on the midpoint, then find the nearest city and search for businesses within that city
     if (businessData.data.search.business.length < maxNumBusinessesToReturn) {
+      // Fetch nearby cities from the midpoint
       const nearbyCitiesResponse = await fetchNearbyCities(midPointGeographicCoordinate);
       const nearbyCitiesData = nearbyCitiesResponse.data.data;
 
-      // Initialize default response
-      responseBody["nearbyCitiesAndBusinesses"] = [];
-
-      // Iterate through all the cities until we have at least maxNumBusinessesToReturn (10) results
-      let citiesIndex = 0, numBusinessesLeft = maxNumBusinessesToReturn - businessData.data.search.business.length;
-      while (citiesIndex < nearbyCitiesData.length && numBusinessesLeft > 0) {
-        // Initialize local constants
-        const cityGeographicCoordinates = {lat: nearbyCitiesData[citiesIndex].latitude, lng: nearbyCitiesData[citiesIndex].longitude};
-        const cityBusinessesResponse = await fetchBusinesses(activity, cityGeographicCoordinates, numBusinessesLeft);
-        const cityBusinessesData = cityBusinessesResponse.data;
-  
-        // Check if there are any results in this city that matches the selected activity
-        if (cityBusinessesData.data.search.business.length > 0) {
-          const newCity = {
-            ...nearbyCitiesData[citiesIndex],
-            businesses: [...cityBusinessesData.data.search.business]
-          }
-          responseBody["nearbyCitiesAndBusinesses"].push(newCity);
-          numBusinessesLeft -= cityBusinessesData.data.search.business.length;
-        }
-        
-        // Increment the city index
-        citiesIndex += 1;
-      }
+      // Fetch businesses from nearby cities
+      const numBusinessesLeft = maxNumBusinessesToReturn - businessData.data.search.business.length;
+      responseBody["nearbyCitiesAndBusinesses"] = await findBusinessesFromNearbyCities(activity, nearbyCitiesData, maxNumBusinessesToReturn, numBusinessesLeft, seenBusinesses);
+      console.log(responseBody["nearbyCitiesAndBusinesses"])
     }
     // Send results back to user
     res.status(200);

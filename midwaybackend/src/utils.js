@@ -55,7 +55,7 @@ const calculateMidPoint = (googleAPIResponse) => {
 /*
  * Fetches locations near the geographic coordinates 
  */
-const fetchBusinesses = (activity, geographicCoordinates, offset = 10) => {
+const fetchBusinesses = (activity, geographicCoordinates, offset = 5) => {
   // Configurations for Yelp graphQL request
   const yelpApiUrl = 'https://api.yelp.com/v3/graphql';
   const config = {
@@ -137,5 +137,66 @@ const fetchNearbyCities = (geographicCoordinates) => {
   });
 }
 
+const createSetOfSeenBusinesses = (businessData) => {
+  const seenBusinesses = new Set();
+  for (let {coordinates} of businessData.data.search.business) {
+    const stringCoords = `${coordinates.latitude}${coordinates.longitude}`;
+    seenBusinesses.add(stringCoords);
+  }
+  return seenBusinesses;
+}
 
-module.exports = { fetchGeocoding, calculateMidPoint, fetchBusinesses, fetchNearbyCities }
+/*
+ * Iterates through an array of nearby cities and fetches businesses within those cities 
+ */
+const findBusinessesFromNearbyCities = async (activity, nearbyCitiesData, maxNumBusinessesToReturn, numBusinessesLeft, seenBusinesses) => {
+  try {
+    // Return an array of objects (cities) 
+    let nearbyCitiesAndBusinesses = [], citiesIndex = 0;
+  
+    // Iterate through all the cities until we have at least maxNumBusinessesToReturn (10) results
+    while (citiesIndex < nearbyCitiesData.length && numBusinessesLeft > 0) {
+      // Initialize local constants
+      const numBusinessesToFetch = (maxNumBusinessesToReturn - numBusinessesLeft) * 2;
+      const cityGeographicCoordinates = {lat: nearbyCitiesData[citiesIndex].latitude, lng: nearbyCitiesData[citiesIndex].longitude};
+      const cityBusinessesResponse = await fetchBusinesses(activity, cityGeographicCoordinates, numBusinessesToFetch);
+      const cityBusinessesData = cityBusinessesResponse.data;
+  
+      // Iterate through all businesses found and store them in the array
+      const businesses = [];
+      for (let business of cityBusinessesData.data.search.business) {
+        // Check if we reached the search limit
+        if (numBusinessesLeft === 0) {
+          break;
+        }
+
+        // Check if we seen this business before
+        const businessCoordinate = `${business.coordinates.latitude}${business.coordinates.longitude}`;
+        if (!seenBusinesses.has(businessCoordinate)) {
+          businesses.push({ ...business });
+          seenBusinesses.add(businessCoordinate);
+          numBusinessesLeft -= 1;
+        }
+      }
+
+      if (businesses.length > 0) {
+        const newCity = {
+          ...nearbyCitiesData[citiesIndex],
+          "businesses": businesses
+        }
+        nearbyCitiesAndBusinesses.push(newCity);
+      }
+      
+      // Increment the city index
+      citiesIndex += 1;
+    }
+
+    return nearbyCitiesAndBusinesses;
+  } catch (err) {
+    console.log(`Error: ${err}`);
+    return [];
+  }
+}
+
+
+module.exports = { fetchGeocoding, calculateMidPoint, fetchBusinesses, fetchNearbyCities , createSetOfSeenBusinesses, findBusinessesFromNearbyCities }

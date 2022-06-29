@@ -32,8 +32,6 @@ const validateAddress = async (address, invalidFields, isFirstAddress=true) => {
   }
 }
 
-//https://maps.googleapis.com/maps/api/geocode/json?address=122%20Chemin%20de%20Montr%C3%A9al%20O,%20Gatineau,%20QC%20J8M%201P4,%20Canada&key=AIzaSyAr57P4SFP6hdgap9hqfa31X7eyJ5RTwAQ
-
 // Validates that the activity is within the list of activities
 const validateActivity = (activity, invalidFields) => {
   if (!validateNotUndefined(activity, 'activity', invalidFields)) {
@@ -85,7 +83,7 @@ const validateParams = async (req, res, next) =>  {
   const isValidSecondAddress = await validateAddress(secondAddress, invalidFields, false);
   const isValidActivity = validateActivity(activity, invalidFields);
   const isValidTransportation = validateTransportation(transportation, invalidFields);
-  
+
   // Is only valid if all checks return true
   const isValid = isValidFirstAddress && isValidSecondAddress && isValidActivity && isValidTransportation;
   
