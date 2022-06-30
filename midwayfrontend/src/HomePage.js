@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { getBackgroundImagePromise } from "./utils";
 import Grid from "@mui/material/Grid";
 import Item from "./Item";
+
+import dummyData from './DummyResult';
 
 
 import HomePageHeader from "./HomePageHeader";
@@ -13,6 +16,7 @@ import HomePageFooter from "./HomePageFooter";
 import HomePageFormButton from "./HomePageFormButton";
 
 const HomePage = () => {
+  // State for the form components
   const [firstAddress, setFirstAddress] = useState('');
   const [secondAddress, setSecondAddress] = useState('');
   const [activity, setActivity] = useState('Any');
@@ -20,6 +24,9 @@ const HomePage = () => {
 
   const [loading, setLoading] = useState(false);
   const [imageURL, setImageURL] = useState(null);
+
+  // Hook used to navigate to meeting-location page
+  const navigate = useNavigate();
 
   // Ensure that the address the users selected are valid addresses in google maps
   const [submitButtonPressed, setSubmitButtonPressed] = useState(false);
@@ -93,6 +100,14 @@ const HomePage = () => {
     return helperText;
   }
 
+  /*
+   * Used to redirect to the results page
+   */
+  const redirectToMeetingLocationsPage = (url, meetingLocationsData) => {
+    console.log('hit');
+    navigate(url, { state: { meetingLocationsData } });
+  }
+
   const handleSubmit = (e) => {
     const formValues = {
       firstAddress: firstAddress,
@@ -114,27 +129,33 @@ const HomePage = () => {
     }
 
     // Display loading animation on button
+    // ! There might be a bug, since the button is not loading?
     setLoading(true);
 
     // Perform a fetch request
-    console.log(formValues);
-    const serverURL = process.env.REACT_APP_SERVER_URL || "http://localhost:5000/";
-    const url = serverURL + `find-locations/firstAddress=${firstAddress}/secondAddress=${secondAddress}/activity=${activity}/transportation=${transportation}`;
-    console.log("fetching data from ", url);
+    // const serverURL = process.env.REACT_APP_SERVER_URL || "http://localhost:5000/";
+    // const url = serverURL + `find-locations/firstAddress=${firstAddress}/secondAddress=${secondAddress}/activity=${activity}/transportation=${transportation}`;
 
-    fetch(url)
-      .then(response => {
-        console.log(response);
-        response.json()
-          .then(data => {console.log(data)})
-          .catch(err => {console.log(`error parsing response json: ${err}`)});
-      })
-      .catch(err => console.log(`error at fetching url: ${err}`));
+    // fetch(url)
+    //   .then(response => {
+    //     // Get the response and parse the json
+    //     response.json()
+    //       .then(data => {
 
-    // Display regular button
-    setLoading(false);
-
-    // Redirect to new page
+    //         console.log(data);
+            
+    //         // Redirect to new page
+    //         const meetingLocationsURL = `/meeting-locations/firstAddress=${firstAddress}/secondAddress=${secondAddress}/activity=${activity}/transportation=${transportation}`;
+    //         redirectToMeetingLocationsPage(meetingLocationsURL, data);
+    //       })
+    //       .catch(err => {console.log(`error parsing response json: ${err}`)});
+    //   })
+    //   .catch(err => console.log(`error at fetching url: ${err}`));
+    
+    const data = dummyData;
+    const meetingLocationsURL = `/meeting-locations/firstAddress=${firstAddress}/secondAddress=${secondAddress}/activity=${activity}/transportation=${transportation}`;
+    console.log(meetingLocationsURL);
+    redirectToMeetingLocationsPage(meetingLocationsURL, data);
   }
 
   return (

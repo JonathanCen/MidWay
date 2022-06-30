@@ -1,5 +1,6 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import MeetingLocations from "./MeetingLocations";
 import HomePage from "./HomePage";
 import PageNotFound from "./PageNotFound";
 
@@ -19,7 +20,7 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        {/* <Route path="/query" element={} /> */}
+        <Route path="/meeting-locations/firstAddress=:firstAddress/secondAddress=:secondAddress/activity=:activity/transportation=:transportation" element={<MeetingLocations />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>

@@ -7,7 +7,7 @@ const setResponseHeaders = require('./middleware/setResponseHeaders');
 
 // define the  
 router.get('/firstAddress=:firstAddress/secondAddress=:secondAddress/activity=:activity/transportation=:transportation', setResponseHeaders, validateParams, validateTransportationFeasibility, async (req, res) => {
-  const { firstAddress, secondAddress, activity, transportation } = req.params;
+  const { activity } = req.params;
   const maxNumBusinessesToReturn = 10;
   const googleAPIResponse = res.locals.directionsResponseData;
   const responseBody = {message: 'Valid request!', requestBody: req.params};
@@ -19,7 +19,8 @@ router.get('/firstAddress=:firstAddress/secondAddress=:secondAddress/activity=:a
 
   try {
     // Find places based on their activity w/ Yelp API
-    const businessResponse = await fetchBusinesses(activity, midPointGeographicCoordinate, maxNumBusinessesToReturn);
+    // ! Change the 5 back to maxNumBusinessesToReturn
+    const businessResponse = await fetchBusinesses(activity, midPointGeographicCoordinate, 5);
     const businessData = businessResponse.data;
     responseBody["businesses"] = businessData;
 

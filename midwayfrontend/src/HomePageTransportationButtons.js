@@ -5,7 +5,7 @@ import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import DirectionsWalkIcon from "@mui/icons-material/DirectionsWalk";
 import DirectionsTransitIcon from "@mui/icons-material/DirectionsTransit";
 import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
-import FlightIcon from "@mui/icons-material/Flight";
+// import FlightIcon from "@mui/icons-material/Flight";
 
 const HomePageTransportationButtons = (props) => {
   const [transportation, setTransportation] = useState("Walking");
@@ -45,9 +45,9 @@ const HomePageTransportationButtons = (props) => {
         <ToggleButton value="Cycling" sx={{width: "100%"}}>
           <DirectionsBikeIcon />
         </ToggleButton>
-        <ToggleButton value="Flights" sx={{width: "100%"}}>
+        {/* <ToggleButton value="Flights" sx={{width: "100%"}}>
           <FlightIcon />
-        </ToggleButton>
+        </ToggleButton> */}
       </ToggleButtonGroup>
     </React.Fragment>
   )

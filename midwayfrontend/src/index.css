@@ -223,6 +223,27 @@ h1 {
   height: 0px;
 }
 
+
+/* Meeting Locations Page */
+
+#meeting-locations-header {
+  font-size: 5vh;
+  height: 100%;
+}
+
+#meeting-locations-header-title {
+  position: absolute;
+  left: 2%;
+  top: 1%;
+  cursor: pointer;
+  width: fit-content;
+  font-family: 'Poppins','Helvetica Neue',Helvetica,Arial,sans-serif;
+  font-weight: 800;
+  color: #1b1b1c
+}
+
+
+
 /* Page Not Found CSS */
 #page-not-found-heading,
 #page-not-found-message,
