@@ -18,17 +18,18 @@ const validateAddress = async (address, invalidFields, isFirstAddress=true) => {
   try {
     const addressString = isFirstAddress ? 'firstAddress' : 'secondAddress';
     if (!validateNotUndefined(address, addressString, invalidFields)) {
-      return false;
+      return [null, false];
     }
     const geocodingResponse = await fetchGeocoding(address);
     if (geocodingResponse.data.status !== 'OK') {
       invalidFields.push(addressString);
-      return false;
+      return [null, false];
     }
-    return true;
+    const geographicCoordinates = geocodingResponse.data.results.geometry.location;
+    return [geographicCoordinates, true];
   } catch(err) {
     console.log(`Error: ${err}`)
-    return false;
+    return [null, false];
   }
 }
 
@@ -79,10 +80,13 @@ const validateParams = async (req, res, next) =>  {
 
   // Validate each field
   // const isValidFirstAddress = true;
-  const isValidFirstAddress = await validateAddress(firstAddress, invalidFields);
-  const isValidSecondAddress = await validateAddress(secondAddress, invalidFields, false);
+  const [firstAddressGeographicCoordinates, isValidFirstAddress] = await validateAddress(firstAddress, invalidFields);
+  const [secondAddressGeographicCoordinates, isValidSecondAddress] = await validateAddress(secondAddress, invalidFields, false);
   const isValidActivity = validateActivity(activity, invalidFields);
   const isValidTransportation = validateTransportation(transportation, invalidFields);
+
+  // Pass the fetched data to the next middleware
+  res.locals.addressesOfGeographicCoordinates = [firstAddressGeographicCoordinates, secondAddressGeographicCoordinates];
 
   // Is only valid if all checks return true
   const isValid = isValidFirstAddress && isValidSecondAddress && isValidActivity && isValidTransportation;

@@ -5,7 +5,17 @@ const dummyData = {
         "firstAddress": "125-18 18th Ave, Flushing, NY 11356, USA",
         "secondAddress": "Kew Gardens Rd, Queens, NY, USA",
         "activity": "Food",
-        "transportation": "Driving"
+        "transportation": "Driving",
+        "addressesOfGeographicCoordinates": [
+            {
+                "lat": 40.783,
+                "lng": -73.842412
+            },
+            {
+                "lat": 40.7074483,
+                "lng": -73.8250914
+            }
+        ]
     },
     "midPointGeographicCoordinate": {
         "lat": 40.756985,

@@ -7,11 +7,12 @@ const render = (status) => {
 };
 
 const MeetingLocationsGoogleMapWrapper = (props) => {
+  const { meetingLocationsData } = props;
 
   return (
       <div style={{ height: '90%', width: '100%' }}>
         <Wrapper apiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY} render={render}>
-          <MeetingLocationsGoogleMap style={{ flexGrow: "1", height: "100%" }}/>
+          <MeetingLocationsGoogleMap meetingLocationsData={meetingLocationsData} style={{ flexGrow: "1", height: "100%" }}/>
         </Wrapper>
       </div>
     );

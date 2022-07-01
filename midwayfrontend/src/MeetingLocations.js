@@ -22,8 +22,8 @@ const MeetingLocations = () => {
   return (
     <Grid container sx={{ height: "100vh" }}>
       <Grid item xs={12} sx={{ height: "10vh", border: "solid 1px black" }}> <MeetingLocationsHeader id="meeting-locations-header"/> </Grid>
-      <Grid item xs={3} sx={{  height: "100%", border: "solid 1px blue"}}> <MeetingLocationsList/> </Grid>
-      <Grid item xs={9} sx={{  height: "100%", border: "solid 1px red"}}> <MeetingLocationsGoogleMapWrapper/> </Grid>
+      <Grid item xs={3} sx={{  height: "100%", border: "solid 1px blue"}}> <MeetingLocationsList meetingLocationsData={location.state.meetingLocationsData}/> </Grid>
+      <Grid item xs={9} sx={{  height: "100%", border: "solid 1px red"}}> <MeetingLocationsGoogleMapWrapper meetingLocationsData={location.state.meetingLocationsData}/> </Grid>
     </Grid>
   );
 };
