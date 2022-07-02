@@ -40,7 +40,7 @@ const validateTransportationFeasibility = async (req, res, next) => {
     // If there is any error in the server
     const errorMessage = `There is a server error at middleware validateTransportationFeasibility. Error: ${err}`;
     res.status(400);
-    res.json({message: errorMessage});
+    res.json({message: errorMessage, isValid: false});
     return;
   }
 }

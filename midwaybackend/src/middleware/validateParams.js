@@ -25,7 +25,8 @@ const validateAddress = async (address, invalidFields, isFirstAddress=true) => {
       invalidFields.push(addressString);
       return [null, false];
     }
-    const geographicCoordinates = geocodingResponse.data.results.geometry.location;
+    console.log(geocodingResponse.data.results[0].geometry.location);
+    const geographicCoordinates = geocodingResponse.data.results[0].geometry.location;
     return [geographicCoordinates, true];
   } catch(err) {
     console.log(`Error: ${err}`)
@@ -90,12 +91,17 @@ const validateParams = async (req, res, next) =>  {
 
   // Is only valid if all checks return true
   const isValid = isValidFirstAddress && isValidSecondAddress && isValidActivity && isValidTransportation;
+  console.log(isValidFirstAddress)
+  console.log(isValidSecondAddress)
+  console.log(isValidActivity)
+  console.log(isValidTransportation)
+  console.log(isValid);
   
   // Check whether the inputs are valid, if not sends a 406: not acceptable response
   // Otherwise the request is valid, so continue onto the next middleware
   if (!isValid) {
     res.status(406);
-    res.json({message: `One of the field are not valid. Please check again the following fields : ${invalidFields}`});
+    res.json({message: `One of the field are not valid. Please check again the following fields : ${invalidFields}`, isValid: false});
   } else {
     next();
   }

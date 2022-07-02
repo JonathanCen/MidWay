@@ -91,7 +91,6 @@ const fetchBusinesses = (activity, geographicCoordinates, offset = 5) => {
                 }
                 photos
                 hours {
-                  hours_type
                   open {
                     end
                     start

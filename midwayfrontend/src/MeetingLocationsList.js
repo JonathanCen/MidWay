@@ -10,7 +10,7 @@ import MeetingLocationsListBusiness from './MeetingLocationsListBusiness';
  * 2) Cards of each business that is linked to the acitvity
  */
 const MeetingLocationsList = ({ meetingLocationsData, nearbyCity, activity, businessNumbering }) => {
-  console.log(businessNumbering)
+
   return (
     <Paper
       elevation={8}

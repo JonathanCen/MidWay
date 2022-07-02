@@ -11,7 +11,7 @@ router.get('/firstAddress=:firstAddress/secondAddress=:secondAddress/activity=:a
   const maxNumBusinessesToReturn = 10;
   const googleAPIResponse = res.locals.directionsResponseData;
   const addressesOfGeographicCoordinates = res.locals.addressesOfGeographicCoordinates;
-  const responseBody = {message: 'Valid request!', requestBody: {...req.params, addressesOfGeographicCoordinates}};
+  const responseBody = {message: 'Valid request!', requestBody: {...req.params, addressesOfGeographicCoordinates}, isValid: true};
 
   // Calculate midpoint from the two locations w/ Google API
   // ! Problem is this is computed based on the directions from the firstAddress to secondAddress, can fix is s.t. we are taking both addresses into account

@@ -141,17 +141,21 @@ const HomePage = () => {
     //     // Get the response and parse the json
     //     response.json()
     //       .then(data => {
-
     //         console.log(data);
-            
-    //         // Redirect to new page
-    //         const meetingLocationsURL = `/meeting-locations/firstAddress=${firstAddress}/secondAddress=${secondAddress}/activity=${activity}/transportation=${transportation}`;
-    //         redirectToMeetingLocationsPage(meetingLocationsURL, data);
+    //         if (!data.isValid) {
+    //           console.log(`Message: ${data.message}`)
+    //           setLoading(false);
+    //         } else {
+    //           // Redirect to new page
+    //           const meetingLocationsURL = `/meeting-locations/firstAddress=${firstAddress}/secondAddress=${secondAddress}/activity=${activity}/transportation=${transportation}`;
+    //           redirectToMeetingLocationsPage(meetingLocationsURL, data);
+    //         }
     //       })
     //       .catch(err => {console.log(`error parsing response json: ${err}`)});
     //   })
     //   .catch(err => console.log(`error at fetching url: ${err}`));
     
+
     const data = dummyData;
     const meetingLocationsURL = `/meeting-locations/firstAddress=${firstAddress}/secondAddress=${secondAddress}/activity=${activity}/transportation=${transportation}`;
     console.log(meetingLocationsURL);

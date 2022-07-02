@@ -244,6 +244,15 @@ h1 {
 }
 
 /* Meeting Locations List */
+.business-title, .business-rating, .business-categories, .business-open, .business-review {
+  margin-bottom: 7px;
+}
+
+.business-title {
+  font-size: 17px;
+  font-weight: 700;
+}
+
 .business-content {
   font-family: 'Open Sans', sans-serif;
 }
@@ -256,13 +265,19 @@ h1 {
 }
 
 .business-rating { 
+  font-weight: 500;
   display: flex;
   align-items: center;
 }
 
-.business-title {
-  font-size: 17px;
-  font-weight: 700;
+.business-rating-number-reviews {
+  line-height: 1;
+}
+
+.business-review {
+  margin-top: 10px;
+  font-size: 12px;
+  color: grey;
 }
 
 /* Google Maps */
