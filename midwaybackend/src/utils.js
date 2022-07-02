@@ -91,15 +91,20 @@ const fetchBusinesses = (activity, geographicCoordinates, offset = 5) => {
                 }
                 photos
                 hours {
+                  hours_type
                   open {
                     end
                     start
                     day
                   }
+                  is_open_now
                 }
                 reviews {
                   text
                   rating
+                }
+                categories {
+                    title
                 }
                 url
             }

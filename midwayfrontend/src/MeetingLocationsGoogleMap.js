@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-
+import MapCenterControl from './MapCenterControl';
 
 /*
  * Title format:
@@ -56,6 +56,43 @@ const createMarkerCollectionOfBusinesses = (businesses, nearbyCitiesAndBusinesse
   return collection;
 }
 
+/*
+ * Create a center button on the map that allows user to the recenter the map after clicking onto a marker
+ * Taken from: Google documentation.
+ */
+const createCenterControl = (centerControlContainer, map, bounds) => {
+
+  // Add some style with the center box
+  const centerControlBox = document.createElement("div");
+  centerControlBox.style.backgroundColor = "#fff";
+  centerControlBox.style.border = "2px solid #fff";
+  centerControlBox.style.borderRadius = "3px";
+  centerControlBox.style.boxShadow = "0 2px 6px rgba(0,0,0,.3)";
+  centerControlBox.style.cursor = "pointer";
+  centerControlBox.style.marginTop = "8px";
+  centerControlBox.style.marginBottom = "22px";
+  centerControlBox.style.textAlign = "center";
+  centerControlBox.title = "Click to recenter the map";
+  centerControlContainer.appendChild(centerControlBox);
+
+  // Add some style to the text
+  const centerControlText = document.createElement("div");
+  centerControlText.style.color = "rgb(25,25,25)";
+  centerControlText.style.fontFamily = "Roboto,sans-serif";
+  centerControlText.style.fontSize = "16px";
+  centerControlText.style.lineHeight = "38px";
+  centerControlText.style.paddingLeft = "5px";
+  centerControlText.style.paddingRight = "5px";
+  centerControlText.innerHTML = "Center Map";
+  centerControlBox.appendChild(centerControlText);
+
+  // Add event handler to the div that recenters the map to the bounds
+  centerControlBox.addEventListener("click", () => {
+    map.fitBounds(bounds);
+  });
+
+}
+
 const MeetingLocationsGoogleMapWrapper = ({ style, meetingLocationsData }) => {
   const ref = useRef(null);
   // const [map, setMap] = useState();
@@ -75,13 +112,11 @@ const MeetingLocationsGoogleMapWrapper = ({ style, meetingLocationsData }) => {
 
     // Create a collection for the first and second address marker
     const addressCollection = [
-      [requestBody.addressesOfGeographicCoordinates[0], 'Adr1', `<b>Address 1</b>: ${requestBody.firstAddress}`],
+      [requestBody.addressesOfGeographicCoordinates[0], 'Adr1', `<div class="marker-title-name">Address 1:</div> ${requestBody.firstAddress}`],
       [midPointGeographicCoordinate, "MP", "Calculated Midpoint"],
-      [requestBody.addressesOfGeographicCoordinates[1], 'Adr2', `<b>Address 2</b>: ${requestBody.secondAddress}`],
+      [requestBody.addressesOfGeographicCoordinates[1], 'Adr2', `<div class="marker-title-name">Address 2:</div> ${requestBody.secondAddress}`],
       ...createMarkerCollectionOfBusinesses(businesses, nearbyCitiesAndBusinesses)
     ];
-
-    console.log(addressCollection);
 
     // Sets bounds for the map so that the map will show all the points in the collection
     let bounds = new window.google.maps.LatLngBounds();
@@ -114,7 +149,6 @@ const MeetingLocationsGoogleMapWrapper = ({ style, meetingLocationsData }) => {
         // If the previous content is not the same as the current marker content, then display it
         if (infoWindowPreviousContent !== marker.getTitle()) {
           // Position the map such that the center is the selected marker
-          // map.setCenter(marker.getPosition());
           map.panTo(marker.getPosition());
           map.setZoom(14);
 
@@ -135,53 +169,15 @@ const MeetingLocationsGoogleMapWrapper = ({ style, meetingLocationsData }) => {
     // Fits the map to the points on the map
     map.fitBounds(bounds);
 
-    // // Create a content string for the midpoint marker
-    // const contentString = `<h2>Calculated Midpoint</h2>`;
-
-    // const infoMidPointWindow = new window.google.maps.InfoWindow({
-    //   content: contentString,
-    // });
-
-    // // Mark the calculated midpoint
-    // const midPointMarker = new window.google.maps.Marker({
-    //   position: midPointGeographicCoordinate,
-    //   map,
-    //   label: {
-    //     text: "MP",
-    //     className: "marker-label"
-    //   },
-    //   title: "Calculated MidPoint",
-    // });
-
-    // const markerToggle = {"Midpoint": false}
-
-    // midPointMarker.addListener("click", () => {
-    //   if (!markerToggle["Midpoint"]) {
-    //     infoMidPointWindow.open({
-    //       anchor: midPointMarker,
-    //       map,
-    //       shouldFocus: false,
-    //     }); 
-    //     markerToggle["Midpoint"] = true;
-    //   } else {
-    //     infoMidPointWindow.close();
-    //     markerToggle["Midpoint"] = false;
-    //   }
-    // });
-
-    // infoMidPointWindow.addListener('closeclick', ()=>{
-    //   markerToggle["Midpoint"] = false;
-    // }); 
+    // Add a button to the map that recenters the map
+    const centerControlDiv = document.createElement("div");
+    createCenterControl(centerControlDiv, map, bounds);
+    map.controls[window.google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
 
   }, []);
 
   return (
-      <div ref={ref} style={style} >
-        <div id="map-center-control">
-          <div id="map-center-text" >
-            Recenter map
-          </div>
-        </div>
+      <div ref={ref} style={style}>
       </div>
   );
 };

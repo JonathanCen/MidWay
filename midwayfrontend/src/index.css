@@ -205,11 +205,13 @@ h1 {
   font-weight: 400;
 }
 
+/* !Theres a problem showing the icon */
 .pac-icon, .pac-item-selected>.pac-icon {
   /* background-image: url("../public/map-pin-solid.svg"); */
-  background: url("../public/map-pin-solid.svg");
+  /* background: url("../public/map-pin-solid.svg");
   background-repeat: no-repeat;
   background-size: auto;
+  margin: 15px 10px 0 10px; */
   margin: 15px 10px 0 10px;
 }
 
@@ -234,12 +236,33 @@ h1 {
 #meeting-locations-header-title {
   position: absolute;
   left: 2%;
-  top: 1%;
   cursor: pointer;
   width: fit-content;
   font-family: 'Poppins','Helvetica Neue',Helvetica,Arial,sans-serif;
   font-weight: 800;
   color: #1b1b1c
+}
+
+/* Meeting Locations List */
+.business-content {
+  font-family: 'Open Sans', sans-serif;
+}
+
+.meeting-location-list-title {
+  font-family: 'Poppins','Helvetica Neue',Helvetica,Arial,sans-serif;
+  font-size: 30px;
+  font-weight: 600;
+  margin: 20px 10px 40px 10px;
+}
+
+.business-rating { 
+  display: flex;
+  align-items: center;
+}
+
+.business-title {
+  font-size: 17px;
+  font-weight: 700;
 }
 
 /* Google Maps */
@@ -272,24 +295,6 @@ h1 {
 
 .marker-links:hover {
   text-decoration: underline;
-}
-
-#map-center-control {
-  cursor: pointer;
-  border: 1px solid white;
-  text-align: center;
-  border-radius: 3px;
-  box-shadow: 0 2px 6px rgba(0,0,0,.3);
-  margin-top: 8px;
-  margin-bottom: 22px;
-}
-
-#map-center-text{
-  font-size: 16px;
-  font-family: 'Roboto', sans-serif;
-  line-height: 38px;
-  padding-left: 5px;
-  padding-right: 5px;
 }
 
 
