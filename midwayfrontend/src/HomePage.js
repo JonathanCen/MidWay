@@ -178,20 +178,20 @@ const HomePage = () => {
                 </div>
               </Grid>
               <Grid item sx={{ width: "100%" }}>
-                <HomePageAddressInput statusCode={getStatus(isValidFirstAddress)} required={true} id="input-address-one" label="First Starting Location" helperText={generateHelperText(isValidFirstAddress, 'first')} onTextChange={handleFirstLocationUpdate} onSelectDropDown={handleFirstLocationSelect}/>
+                <HomePageAddressInput statusCode={getStatus(isValidFirstAddress)} required={true} id="input-address-one" label="First Starting Location" helperText={generateHelperText(isValidFirstAddress, 'first')} onTextChange={handleFirstLocationUpdate} onSelectDropDown={handleFirstLocationSelect} address={firstAddress}/>
               </Grid>
               <Grid item sx={{ width: "100%" }}>
-                <HomePageAddressInput statusCode={getStatus(isValidSecondAddress)} required={true} id="input-address-two" label="Second Starting Location" helperText={generateHelperText(isValidSecondAddress, 'second')} onTextChange={handleSecondLocationUpdate} onSelectDropDown={handleSecondLocationSelect}/>
+                <HomePageAddressInput statusCode={getStatus(isValidSecondAddress)} required={true} id="input-address-two" label="Second Starting Location" helperText={generateHelperText(isValidSecondAddress, 'second')} onTextChange={handleSecondLocationUpdate} onSelectDropDown={handleSecondLocationSelect} address={secondAddress}/>
               </Grid>
               <Grid item sx={{ width: "100%" }}>
-                <HomePageActivitySelect statusCode={submitButtonPressed} id="select-activity" label="Activity (Optional)" helperText="Enter an activity of your choice." onNewSelect={handleActivityUpdate} />
+                <HomePageActivitySelect statusCode={submitButtonPressed} id="select-activity" label="Activity (Optional)" helperText="Enter an activity of your choice." onNewSelect={handleActivityUpdate} activity={activity} />
                 {/* <HomePageActivityInput statusCode={submitButtonPressed} id="select-activity" label="Activity (Optional)" helperText="Enter an activity of your choice." onNewSelect={handleActivityUpdate} /> */}
               </Grid>
               <Grid item sx={{ width: "100%" }}>
-                <HomePageTransportationButtons onButtonChange={handleTransportationUpdate}/>
+                <HomePageTransportationButtons onButtonChange={handleTransportationUpdate} transportation={transportation}/>
               </Grid>
               <Grid item sx={{ width: "100%" }}>
-                <HomePageFormButton isLoading={loading}/>
+                <HomePageFormButton isLoading={loading} id="home-page-form-button"/>
               </Grid>
             </Grid>
           </form>

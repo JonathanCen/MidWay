@@ -9,16 +9,16 @@ import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
 
 const ModeTransportationSelect = (props) => {
   // Init state
-  const [transportation, setTransportation] = useState('Walking');
+  // const [transportation, setTransportation] = useState('Walking');
 
   // Init local variables
-  const { id, label, helperText, statusCode, removeHelperText } = props;
+  const { id, label, helperText, statusCode, removeHelperText, transportation } = props;
   const listOfTransportation = ["Driving", "Transit", "Walking", "Cycling"];
 
   // Handles select
   const changeTransportation = (e) => {
     const newTransportation = e.target.value;
-    setTransportation(newTransportation);
+    // setTransportation(newTransportation);
     props.onNewSelect(newTransportation);
   }
 

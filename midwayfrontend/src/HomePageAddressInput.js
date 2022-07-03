@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, forwardRef  } from "react";
 import FormHelperText from '@mui/material/FormHelperText';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
@@ -6,17 +6,21 @@ import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import AddLocationAltTwoToneIcon from '@mui/icons-material/AddLocationAltTwoTone';
 
-const HomePageAddressInput = (props) => {
-  const { id, label, helperText, required, statusCode, removeHelperText } = props;
-  const [address, setAddress] = useState("");
+const HomePageAddressInput = forwardRef((props, ref) => {
+  console.log(`props:`);
+  console.log(props);
+
+  const { id, label, helperText, required, statusCode, removeHelperText, address } = props;
+  // const [address, setAddress] = useState("");
   const inputRef = useRef(null);
 
   // Stores the autocomplete google object
+  // const [autoComplete, setAutoComplete] = useState(null);
   let autoComplete;
 
   // Handles when user types and character into the input
   const handleChange = (e) => {
-    setAddress(e.target.value);
+    // setAddress(e.target.value);
     props.onTextChange(e.target.value);
     props.onSelectDropDown(false);
   }
@@ -25,7 +29,7 @@ const HomePageAddressInput = (props) => {
   const handlePlaceSelect = async () => {
     const place = autoComplete.getPlace();
     if (place.formatted_address !== undefined) {
-      setAddress(place.formatted_address);
+      // setAddress(place.formatted_address);
       props.onTextChange(place.formatted_address);
       props.onSelectDropDown(true);
     }
@@ -41,9 +45,9 @@ const HomePageAddressInput = (props) => {
     });
     
     autoComplete.addListener("place_changed", () => {
-      handlePlaceSelect();
+        handlePlaceSelect();
     });
-  }, [])
+  }, []);
 
 
   return (
@@ -55,6 +59,7 @@ const HomePageAddressInput = (props) => {
               <AddLocationAltTwoToneIcon />
             </InputAdornment>
           }
+          ref={ref}
           inputRef={inputRef}
           required={required}
           onChange={handleChange}
@@ -76,6 +81,6 @@ const HomePageAddressInput = (props) => {
     </FormControl>
 
   );
-}
+});
 
 export default HomePageAddressInput;

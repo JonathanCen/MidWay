@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from "react-router-dom";
 import Stack from '@mui/material/Stack';
 import dummyData from './DummyResult';
@@ -10,12 +10,14 @@ import HomePageFormButton from "./HomePageFormButton";
 import { appHistory } from './App';
 
 const MeetingLocationHeaderForm = () => {
+  const firstAddressRef = useRef(null);
+  const secondAddressRef = useRef(null);
 
   // State for the form components
   const [firstAddress, setFirstAddress] = useState('');
   const [secondAddress, setSecondAddress] = useState('');
   const [activity, setActivity] = useState('Any');
-  const [transportation, setTransportation] = useState('Walking');
+  const [transportation, setTransportation] = useState('Driving');
 
   // Hook used to show the state of the button
   const [loading, setLoading] = useState(false);
@@ -83,7 +85,7 @@ const MeetingLocationHeaderForm = () => {
     setFirstAddress('');
     setSecondAddress('');
     setActivity('Any');
-    setTransportation('Walking');
+    setTransportation('Driving');
     setLoading(false);
     setSubmitButtonPressed(false);
     setIsValidFirstAddress(false);
@@ -157,11 +159,11 @@ const MeetingLocationHeaderForm = () => {
     // <form onSubmit={handleSubmit}>
     // <Stack direction="row" spacing={2}>
     <React.Fragment>
-      <HomePageAddressInput statusCode={getStatus(isValidFirstAddress)} required={true} id="input-address-one" label="First Starting Location" helperText={generateHelperText(isValidFirstAddress, 'first')} onTextChange={handleFirstLocationUpdate} onSelectDropDown={handleFirstLocationSelect} removeHelperText={true}/>
-      <HomePageAddressInput statusCode={getStatus(isValidSecondAddress)} required={true} id="input-address-two" label="Second Starting Location" helperText={generateHelperText(isValidSecondAddress, 'second')} onTextChange={handleSecondLocationUpdate} onSelectDropDown={handleSecondLocationSelect} removeHelperText={true}/>
-      <HomePageActivitySelect statusCode={submitButtonPressed} id="select-activity" label="Activity (Optional)" helperText="Enter an activity of your choice." onNewSelect={handleActivityUpdate} removeHelperText={true}/>
-      <ModeTransportationSelect  statusCode={submitButtonPressed} id="select-transportation" label="Mode Of Transportation" helperText="Select Mode of Transportation." onNewSelect={handleTransportationUpdate} removeHelperText={true} />
-      <HomePageFormButton styles={{ margin: "20px", width: "100%"  }} isLoading={loading} downSize={true} onClickHandler={handleSubmit}/>
+      <HomePageAddressInput statusCode={getStatus(isValidFirstAddress)} required={true} id="input-address-one" label="First Starting Location" helperText={generateHelperText(isValidFirstAddress, 'first')} onTextChange={handleFirstLocationUpdate} onSelectDropDown={handleFirstLocationSelect} removeHelperText={true} address={firstAddress} ref={firstAddressRef} />
+      <HomePageAddressInput statusCode={getStatus(isValidSecondAddress)} required={true} id="input-address-two" label="Second Starting Location" helperText={generateHelperText(isValidSecondAddress, 'second')} onTextChange={handleSecondLocationUpdate} onSelectDropDown={handleSecondLocationSelect} removeHelperText={true}  address={secondAddress} ref={secondAddressRef} />
+      <HomePageActivitySelect statusCode={submitButtonPressed} id="select-activity" label="Activity (Optional)" helperText="Enter an activity of your choice." onNewSelect={handleActivityUpdate} removeHelperText={true} activity={activity}/>
+      <ModeTransportationSelect  statusCode={submitButtonPressed} id="select-transportation" label="Mode Of Transportation" helperText="Select Mode of Transportation." onNewSelect={handleTransportationUpdate} removeHelperText={true} transportation={transportation}/>
+      <HomePageFormButton id="meeting-locations-header-form-button" isLoading={loading} downSize={true} onClickHandler={handleSubmit}/>
     </React.Fragment>
 
     // </form> 

@@ -10,10 +10,11 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 const HomePageActivitySelect = (props) => {
   // Init state
-  const [activity, setActivity] = useState('Any');
+  // const [activity, setActivity] = useState('Any');
+  
   
   // Init local variables
-  const { id, label, helperText, statusCode, removeHelperText } = props;
+  const { id, label, helperText, statusCode, removeHelperText, activity } = props;
   const listOfActivities = ["Any", "Arts & Entertainment", "Beauty & Spas", "Food", "Hotels & Travel", "Nightlife", "Restaurants", "Shopping"];
   const yelpURL = process.env.REACT_APP_PROXY + "https://api.yelp.com/v3/categories";
   const apiKey = process.env.REACT_APP_YELP_API_KEY;
@@ -41,7 +42,7 @@ const HomePageActivitySelect = (props) => {
 
   const changeActivity = (e) => {
     const newActivity = e.target.value;
-    setActivity(newActivity);
+    // setActivity(newActivity);
     props.onNewSelect(newActivity);
   }
 

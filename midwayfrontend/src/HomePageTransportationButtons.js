@@ -8,12 +8,13 @@ import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
 // import FlightIcon from "@mui/icons-material/Flight";
 
 const HomePageTransportationButtons = (props) => {
-  const [transportation, setTransportation] = useState("Walking");
+  // const [transportation, setTransportation] = useState("Walking");
+  const { transportation } = props;
 
   const changeTransportation = (e, newTransportation) => {
     if (newTransportation !== null) {
       // Update component state
-      setTransportation(newTransportation);
+      // setTransportation(newTransportation);
 
       // Update parent's form state
       props.onButtonChange(newTransportation);
