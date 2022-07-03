@@ -7,9 +7,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import AddLocationAltTwoToneIcon from '@mui/icons-material/AddLocationAltTwoTone';
 
 const HomePageAddressInput = forwardRef((props, ref) => {
-  console.log(`props:`);
-  console.log(props);
-
+  
   const { id, label, helperText, required, statusCode, removeHelperText, address } = props;
   // const [address, setAddress] = useState("");
   const inputRef = useRef(null);

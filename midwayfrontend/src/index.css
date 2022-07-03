@@ -260,7 +260,7 @@ h1 {
   font-weight: 700;
 }
 
-.business-content {
+.business-content, .business-information {
   font-family: 'Open Sans', sans-serif;
 }
 
@@ -285,6 +285,32 @@ h1 {
   /* margin: 10px 15px 0px 15px; */
   margin-top: 10px;
   color: grey;
+}
+
+#meeting-locations-business-information-back-button {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  background-color: white;
+  z-index: 1;
+}
+
+#meeting-locations-business-information-image {
+  box-shadow: inset 10px 10px 50px #fff;
+}
+
+#meeting-locations-business-information-more-image-button {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background-color: white;
+  z-index: 1;
+}
+
+#business-information-title {
+  font-weight: 700;
+  font-size: 30px;
+  margin-left: 5%;
 }
 
 /* Google Maps */

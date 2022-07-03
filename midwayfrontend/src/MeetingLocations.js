@@ -1,18 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {useLocation} from 'react-router-dom';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
+
+import { BusinessPressedContext } from "./BusinessPressedContext";
 
 import MeetingLocationsHeader from "./MeetingLocationsHeader";
 import MeetingLocationHeaderForm from "./MeetingLocationHeaderForm";
 import MeetingLocationsGoogleMapWrapper from "./MeetingLocationsGoogleMapWrapper";
 import MeetingLocationsList from "./MeetingLocationsList";
+import MeetingLocationsBusinessInformation from "./MeetingLocationsBusinessInformation";
+
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+
+import Collapse from '@mui/material/Collapse';
 
 const MeetingLocations = (props) => {
+  // Hook to get params passed in from the previous route
   const location  = useLocation();
+
+  // Initalize some state, and retrieve some context
   const [businessNumbering, setBusinessNumbering] = useState({});
+  const { isBusinessPressed } = useContext(BusinessPressedContext);
 
   const isNearbyCity = (nearbyCities) => nearbyCities !== undefined;
+
+  const getBusinessNum = (businessName) => {
+    return businessNumbering[businessName]
+  } 
 
   useEffect(() => {
     console.log(location);
@@ -46,15 +62,28 @@ const MeetingLocations = (props) => {
           <MeetingLocationHeaderForm/>
         </Stack>
       </Grid>
-      <Grid item xs={3} sx={{  height: "100%", overflowY: "scroll", height: "90%" }}> 
-        <MeetingLocationsList meetingLocationsData={location.state.meetingLocationsData.businesses.data.search.business} activity={location.state.meetingLocationsData.requestBody.activity} businessNumbering={businessNumbering}/> 
-        { 
-          isNearbyCity(location.state.meetingLocationsData.nearbyCitiesAndBusinesses) && 
-          location.state.meetingLocationsData.nearbyCitiesAndBusinesses.map((business, index) => 
-            <MeetingLocationsList key={index} meetingLocationsData={business.businesses} nearbyCity={business.city} activity={location.state.meetingLocationsData.requestBody.activity} businessNumbering={businessNumbering}/>)
-        }
+      <Grid item xs={4} sx={{  height: "100%", height: "90%", overflowY: "scroll" }}> 
+        <Collapse in={isBusinessPressed}>
+          <MeetingLocationsBusinessInformation getNum={getBusinessNum}/>
+        </Collapse>
+        <Collapse in={!isBusinessPressed}>
+          {/* <div style={{ overflowY: "scroll" }}>
+            <MeetingLocationsList meetingLocationsData={location.state.meetingLocationsData.businesses.data.search.business} activity={location.state.meetingLocationsData.requestBody.activity} businessNumbering={businessNumbering}/> 
+            { 
+              isNearbyCity(location.state.meetingLocationsData.nearbyCitiesAndBusinesses) && 
+              location.state.meetingLocationsData.nearbyCitiesAndBusinesses.map((business, index) => 
+                <MeetingLocationsList key={index} meetingLocationsData={business.businesses} nearbyCity={business.city} activity={location.state.meetingLocationsData.requestBody.activity} businessNumbering={businessNumbering}/>)
+            }
+          </div> */}
+          <MeetingLocationsList meetingLocationsData={location.state.meetingLocationsData.businesses.data.search.business} activity={location.state.meetingLocationsData.requestBody.activity} businessNumbering={businessNumbering}/> 
+          { 
+            isNearbyCity(location.state.meetingLocationsData.nearbyCitiesAndBusinesses) && 
+            location.state.meetingLocationsData.nearbyCitiesAndBusinesses.map((business, index) => 
+              <MeetingLocationsList key={index} meetingLocationsData={business.businesses} nearbyCity={business.city} activity={location.state.meetingLocationsData.requestBody.activity} businessNumbering={businessNumbering}/>)
+          }
+        </Collapse>
       </Grid>
-      <Grid item xs={9} sx={{  height: "100%" }}> <div/> </Grid>
+      <Grid item xs={8} sx={{  height: "100%" }}> <div/> </Grid>
       {/* <Grid item xs={9} sx={{  height: "100%" }}> <MeetingLocationsGoogleMapWrapper meetingLocationsData={location.state.meetingLocationsData}/> </Grid> */}
     </Grid>
   );

@@ -1,15 +1,20 @@
 import React from "react";
 import { Paper } from "@mui/material";
 
-function Item(props) {
+const Item = (props) => {
+  const { id, isBusinessInformation } = props;
   return (
     <Paper
-      id={props.id}
+      id={id}
       elevation={6}
       sx={{
-        padding: "10px",
+        padding: isBusinessInformation ? "5px" : "10px",
+        // marginLeft: isBusinessInformation ? "10px" : "0px",
+        // marginRight: isBusinessInformation ? "10px" : "0px",
+        margin: isBusinessInformation ? "10px" : "0px",
         backgroundColor: "#fff",
-        borderRadius: "3%"
+        borderRadius: "3%",
+        height: "100%", width: "100%"
       }}
     >
       {props.children}

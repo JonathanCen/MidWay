@@ -1,15 +1,22 @@
 import React, { useEffect, useContext } from "react";
-import { GoogleMapContext } from "./GoogleMapContext";
 import { Card, CardMedia, CardContent, CardActionArea, Rating, Chip, Stack  } from '@mui/material';
-import StarIcon from '@mui/icons-material/Star';
 import { Box } from '@mui/system';
+import StarIcon from '@mui/icons-material/Star';
 import CommentIcon from '@mui/icons-material/Comment';
+import { GoogleMapContext } from "./GoogleMapContext";
+import { BusinessPressedContext } from "./BusinessPressedContext";
 
 const MeetingLocationsListBusiness = ( { business, num } ) => {
   const { mapInstance, mapMarkerInfoWindow, mapMarkerInformation, businessNameToMarker } = useContext(GoogleMapContext);
+  const { setIsBusinessPressed, setBusinessInformation } = useContext(BusinessPressedContext)
  
   const handleBusinessCardClick = () => {
+    setIsBusinessPressed(true);
+    setBusinessInformation({...business});
+
     if (mapInstance !== null && mapMarkerInfoWindow !== null && mapMarkerInformation !== null) {
+      setIsBusinessPressed(true);
+      setBusinessInformation({...business});
 
       const businessLat = business.coordinates.latitude, businessLng = business.coordinates.longitude;  
       const businessMarker = businessNameToMarker[business.name];
