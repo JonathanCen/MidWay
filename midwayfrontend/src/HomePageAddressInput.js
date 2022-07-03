@@ -7,7 +7,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import AddLocationAltTwoToneIcon from '@mui/icons-material/AddLocationAltTwoTone';
 
 const HomePageAddressInput = (props) => {
-  const { id, label, helperText, required, statusCode } = props;
+  const { id, label, helperText, required, statusCode, removeHelperText } = props;
   const [address, setAddress] = useState("");
   const inputRef = useRef(null);
 
@@ -63,13 +63,16 @@ const HomePageAddressInput = (props) => {
           value={address}
           type="text"
         />
-        <FormHelperText id={`${id}-helper-text`} 
-          sx={{
-            color: statusCode === 2 ? '#2e7d32' : ''
-          }}
-        >
-          {helperText}
-        </FormHelperText>
+        { 
+          !removeHelperText && 
+          <FormHelperText id={`${id}-helper-text`} 
+            sx={{
+              color: statusCode === 2 ? '#2e7d32' : ''
+            }}
+          >
+            {helperText}
+          </FormHelperText>
+        }
     </FormControl>
 
   );

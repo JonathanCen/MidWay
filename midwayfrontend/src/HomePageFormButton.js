@@ -3,7 +3,8 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import TravelExploreTwoToneIcon from '@mui/icons-material/TravelExploreTwoTone';
 
 const HomePageFormButton = (props) => {
-  const { isLoading } = props;
+  const { isLoading, downSize, styles, onClickHandler } = props;
+
   return (
     <LoadingButton
       type="submit"
@@ -11,8 +12,9 @@ const HomePageFormButton = (props) => {
       loading={isLoading}
       loadingPosition="end"
       variant="outlined"
-      size="large"
-      sx={{ width: "100%" }}
+      size={ downSize ? "medium" : "large"}
+      sx={ styles !== undefined ? styles : { width: "100%" }}
+      onClick={onClickHandler}
     >
       {isLoading ? 'Finding Locations' : 'Find Meeting Locations'}
     </LoadingButton>

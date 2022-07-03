@@ -1,18 +1,52 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
+import { GoogleMapContext } from "./GoogleMapContext";
 import { Card, CardMedia, CardContent, CardActionArea, Rating, Chip, Stack  } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import { Box } from '@mui/system';
 import CommentIcon from '@mui/icons-material/Comment';
 
 const MeetingLocationsListBusiness = ( { business, num } ) => {
+  const { mapInstance, mapMarkerInfoWindow, mapMarkerInformation, businessNameToMarker } = useContext(GoogleMapContext);
+ 
+  const handleBusinessCardClick = () => {
+    if (mapInstance !== null && mapMarkerInfoWindow !== null && mapMarkerInformation !== null) {
 
-  console.log(business);
+      const businessLat = business.coordinates.latitude, businessLng = business.coordinates.longitude;  
+      const businessMarker = businessNameToMarker[business.name];
+  
+      // Pan to the location
+      mapInstance.panTo(businessMarker.getPosition());
+  
+      // Make the marker info window pop out
+      for (let [{lat, lng}, ..._] of mapMarkerInformation) {
+        if (lat === businessLat && lng === businessLng) {
+          // When initally pressed close the info window
+          const infoWindowPreviousContent = mapMarkerInfoWindow.getContent();
+          mapMarkerInfoWindow.setContent(undefined);
+          mapMarkerInfoWindow.close();
+  
+          // If the previous content is not the same as the current marker content, then display it
+          if (infoWindowPreviousContent !== businessMarker.getTitle()) {
+            // Position the map such that the center is the selected marker
+            mapInstance.panTo(businessMarker.getPosition());
+            mapInstance.setZoom(14);
+  
+            // Open the info window
+            mapMarkerInfoWindow.setContent(businessMarker.getTitle());
+            mapMarkerInfoWindow.open(businessMarker.getMap(), businessMarker);
+          }
+        }
+      }
+    }
+  };
 
+  // Returns the local timezone current time and date
   const getCurrentDateIndex = () => {
     const currentDate = new Date();
     return currentDate.getDay();    
   }
 
+  // Converts the input string 24 hour clock notation to 12 hour clock notation
   const convert24HourClockNotationTo12HourClockNotation = (str24Hour) => {
     const strHour = str24Hour.slice(0, 2);
     const strMinutes = str24Hour.slice(2, );
@@ -26,10 +60,7 @@ const MeetingLocationsListBusiness = ( { business, num } ) => {
   const currentDateIndex = getCurrentDateIndex();
 
   return (
-  <Card elevation={5} sx={{ display: 'flex', margin: "10px", justifyContent: "center", alignItems: "center" }} >
-    {/* <Box sx={{ height: "100%", width: "100%", position: "relative" }}>
-      <CardMedia component="img" image={business.photos[0]} alt={`Image from ${business.name}`} sx={{ height: "100%", width: "100%" }} />
-    </Box> */}
+  <Card elevation={5} sx={{ display: 'flex', margin: "10px", justifyContent: "center", alignItems: "center"}} onClick={handleBusinessCardClick} >
     <CardActionArea>
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
         <CardContent className="business-content" sx={{ height: '100%' }}>
@@ -39,13 +70,13 @@ const MeetingLocationsListBusiness = ( { business, num } ) => {
                 <div className="business-rating-rating" sx={{ display: 'flex', alignItems: 'center' }}>
                   <Rating defaultValue={business.rating} size="small" precision={0.5} icon={<StarIcon fontSize="inherit" />} emptyIcon={<StarIcon fontSize="inherit" />} readOnly />
                 </div>
-                <div className="business-rating-number-reviews" sx={{lineHeight: 1}} >{business.review_count}</div>
+                <div className="business-rating-number-reviews" >{business.review_count}</div>
             </div >
           </Stack>
           <Stack direction="row" spacing={1} className="business-categories">
             {
               business.categories.length > 0 && business.categories.map((category, index) => 
-                <Chip label={category.title} variant="outlined" size="small" />
+                <Chip label={category.title} variant="outlined" size="small" key={index}/>
               )
             }
           </Stack>
@@ -57,7 +88,7 @@ const MeetingLocationsListBusiness = ( { business, num } ) => {
               { business.hours.length > 0 && business.hours[0].is_open_now !== undefined && <Chip className="business-open-is-open-text" label={ business.hours[0].is_open_now ? "Open" : "Closed" } color={ business.hours[0].is_open_now ? "success" : "error" } size="small" sx={{ height: "16px" }} /> }
             </div>
           </Stack>
-          <div className="business-reiew"> <CommentIcon color="disabled" sx={{ fontSize: 16 }} /> { `${ business.reviews[0].text }` }</div >
+          <div className="business-review"> <CommentIcon color="disabled" sx={{ fontSize: 16 }} /> { `${ business.reviews[0].text }` }</div >
         </CardContent>
       </Box>
     </CardActionArea>

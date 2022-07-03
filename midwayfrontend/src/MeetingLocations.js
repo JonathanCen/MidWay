@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import {useLocation, useParams} from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
+import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
 
 import MeetingLocationsHeader from "./MeetingLocationsHeader";
+import MeetingLocationHeaderForm from "./MeetingLocationHeaderForm";
 import MeetingLocationsGoogleMapWrapper from "./MeetingLocationsGoogleMapWrapper";
 import MeetingLocationsList from "./MeetingLocationsList";
 
-const MeetingLocations = () => {
+const MeetingLocations = (props) => {
   const location  = useLocation();
   const [businessNumbering, setBusinessNumbering] = useState({});
 
@@ -23,23 +25,28 @@ const MeetingLocations = () => {
     let businessNumber = 1, tmpBusinessNumbering = {};
     location.state.meetingLocationsData.businesses.data.search.business.forEach((business) => {
       tmpBusinessNumbering[business.name] = businessNumber++; 
-    })
-    // Check if there's nearbyCities
+    });
 
+    // Check if there's nearbyCities
     if (isNearbyCity(location.state.meetingLocationsData.nearbyCitiesAndBusinesses)) {
       location.state.meetingLocationsData.nearbyCitiesAndBusinesses.forEach((city) => {
         city.businesses.forEach((business) => {
           tmpBusinessNumbering[business.name] = businessNumber++;
-        })
-      })
+        });
+      });
     }
     setBusinessNumbering({...tmpBusinessNumbering});
-  }, [])
+  }, [location.pathname])
 
   return (
     <Grid container sx={{ height: "100vh" }}>
-      <Grid item xs={12} sx={{ height: "10vh", border: "solid 1px black" }}> <MeetingLocationsHeader id="meeting-locations-header"/> </Grid>
-      <Grid item xs={3} sx={{  height: "100%", border: "solid 1px blue", overflowY: "scroll", height: "90%" }}> 
+      <Grid item xs={12} sx={{ height: "10vh", border: "solid 1px black" }}> 
+        <Stack direction="row" spacing={2} justifyContent="center" alignItems="center" sx= {{ height: "100%"}}>
+          <MeetingLocationsHeader id ="meeting-locations-header"/> 
+          <MeetingLocationHeaderForm/>
+        </Stack>
+      </Grid>
+      <Grid item xs={3} sx={{  height: "100%", overflowY: "scroll", height: "90%" }}> 
         <MeetingLocationsList meetingLocationsData={location.state.meetingLocationsData.businesses.data.search.business} activity={location.state.meetingLocationsData.requestBody.activity} businessNumbering={businessNumbering}/> 
         { 
           isNearbyCity(location.state.meetingLocationsData.nearbyCitiesAndBusinesses) && 
@@ -47,8 +54,8 @@ const MeetingLocations = () => {
             <MeetingLocationsList key={index} meetingLocationsData={business.businesses} nearbyCity={business.city} activity={location.state.meetingLocationsData.requestBody.activity} businessNumbering={businessNumbering}/>)
         }
       </Grid>
-      <Grid item xs={9} sx={{  height: "100%", border: "solid 1px blue"}}> <div/> </Grid>
-      {/* <Grid item xs={9} sx={{  height: "100%", border: "solid 1px red"}}> <MeetingLocationsGoogleMapWrapper meetingLocationsData={location.state.meetingLocationsData}/> </Grid> */}
+      <Grid item xs={9} sx={{  height: "100%" }}> <div/> </Grid>
+      {/* <Grid item xs={9} sx={{  height: "100%" }}> <MeetingLocationsGoogleMapWrapper meetingLocationsData={location.state.meetingLocationsData}/> </Grid> */}
     </Grid>
   );
 };

@@ -12,11 +12,9 @@ const MeetingLocationsHeader = (props) => {
   }
 
   return (
-    <div id = {id}>
-      <div id = {`${id}-title`} onClick={navigateToHomePage}>
-        MidWay
-      </div>
-    </div> 
+    <div id={id}>
+      <div id = {`${id}-title`} onClick={navigateToHomePage}> MidWay </div>
+    </div>
   );
 };
 

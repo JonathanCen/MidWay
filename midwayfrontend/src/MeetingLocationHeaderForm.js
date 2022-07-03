@@ -1,29 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { getBackgroundImagePromise } from "./utils";
-import Grid from "@mui/material/Grid";
-import Item from "./Item";
-
+import Stack from '@mui/material/Stack';
 import dummyData from './DummyResult';
 
-
-import HomePageHeader from "./HomePageHeader";
-// import HomePageActivityInput from "./HomePageActivityInput";
 import HomePageAddressInput from "./HomePageAddressInput";
 import HomePageActivitySelect from "./HomePageActivitySelect";
-import HomePageTransportationButtons from "./HomePageTransportationButtons";
+import ModeTransportationSelect from "./ModeTransportationSelect";
 import HomePageFormButton from "./HomePageFormButton";
-import HomePageFooter from "./HomePageFooter";
+import { appHistory } from './App';
 
-const HomePage = () => {
+const MeetingLocationHeaderForm = () => {
+
   // State for the form components
   const [firstAddress, setFirstAddress] = useState('');
   const [secondAddress, setSecondAddress] = useState('');
   const [activity, setActivity] = useState('Any');
   const [transportation, setTransportation] = useState('Walking');
 
+  // Hook used to show the state of the button
   const [loading, setLoading] = useState(false);
-  const [imageURL, setImageURL] = useState(null);
 
   // Hook used to navigate to meeting-location page
   const navigate = useNavigate();
@@ -32,22 +27,6 @@ const HomePage = () => {
   const [submitButtonPressed, setSubmitButtonPressed] = useState(false);
   const [isValidFirstAddress, setIsValidFirstAddress] = useState(false);
   const [isValidSecondAddress, setIsValidSecondAddress] = useState(false);
-  const useDefaultBackground = true;
-
-  useEffect(() => {
-    if (useDefaultBackground) {
-      setImageURL("/background-image-large.jpg");
-    } else {
-      const backgroundImagePromise = getBackgroundImagePromise();
-      backgroundImagePromise
-        .then((reponse) => setImageURL(reponse.response.urls.regular))
-        .catch((err) =>
-          console.log(
-            `There was an error retrieving image from unsplash. ${err}`
-          )
-        );
-    }
-  }, []);
 
   /*
    * Event handlers when user types into the input boxes
@@ -98,6 +77,17 @@ const HomePage = () => {
     }
 
     return helperText;
+  }
+
+  const resetState = () => {
+    setFirstAddress('');
+    setSecondAddress('');
+    setActivity('Any');
+    setTransportation('Walking');
+    setLoading(false);
+    setSubmitButtonPressed(false);
+    setIsValidFirstAddress(false);
+    setIsValidSecondAddress(false);
   }
 
   /*
@@ -159,57 +149,23 @@ const HomePage = () => {
     const data = dummyData;
     const meetingLocationsURL = `/meeting-locations/firstAddress=${firstAddress}/secondAddress=${secondAddress}/activity=${activity}/transportation=${transportation}`;
     console.log(meetingLocationsURL);
+    resetState();
     redirectToMeetingLocationsPage(meetingLocationsURL, data);
   }
+  
+  return (      
+    // <form onSubmit={handleSubmit}>
+    // <Stack direction="row" spacing={2}>
+    <React.Fragment>
+      <HomePageAddressInput statusCode={getStatus(isValidFirstAddress)} required={true} id="input-address-one" label="First Starting Location" helperText={generateHelperText(isValidFirstAddress, 'first')} onTextChange={handleFirstLocationUpdate} onSelectDropDown={handleFirstLocationSelect} removeHelperText={true}/>
+      <HomePageAddressInput statusCode={getStatus(isValidSecondAddress)} required={true} id="input-address-two" label="Second Starting Location" helperText={generateHelperText(isValidSecondAddress, 'second')} onTextChange={handleSecondLocationUpdate} onSelectDropDown={handleSecondLocationSelect} removeHelperText={true}/>
+      <HomePageActivitySelect statusCode={submitButtonPressed} id="select-activity" label="Activity (Optional)" helperText="Enter an activity of your choice." onNewSelect={handleActivityUpdate} removeHelperText={true}/>
+      <ModeTransportationSelect  statusCode={submitButtonPressed} id="select-transportation" label="Mode Of Transportation" helperText="Select Mode of Transportation." onNewSelect={handleTransportationUpdate} removeHelperText={true} />
+      <HomePageFormButton styles={{ margin: "20px", width: "100%"  }} isLoading={loading} downSize={true} onClickHandler={handleSubmit}/>
+    </React.Fragment>
 
-  return (
-    <div id="home-page-container">
-      {/* <HomePageHeader /> */}
-      {/* <div id="home-page-body-wrapper"> */}
-
-      <div id="home-page-body" style={{ backgroundImage: `url(${imageURL})` }}>
-        <HomePageHeader/>
-        <Item id="hope-page-form-outline">
-          <form  onSubmit={handleSubmit}>
-            <Grid container direction="column" justifyContent="center" alignItems="center" rowSpacing={3} >
-              <Grid item sx={{ width: "100%" }}>
-                <div id="home-page-form-title">
-                  Finding ways for people to meet in the middle.
-                </div>
-              </Grid>
-              <Grid item sx={{ width: "100%" }}>
-                <HomePageAddressInput statusCode={getStatus(isValidFirstAddress)} required={true} id="input-address-one" label="First Starting Location" helperText={generateHelperText(isValidFirstAddress, 'first')} onTextChange={handleFirstLocationUpdate} onSelectDropDown={handleFirstLocationSelect}/>
-              </Grid>
-              <Grid item sx={{ width: "100%" }}>
-                <HomePageAddressInput statusCode={getStatus(isValidSecondAddress)} required={true} id="input-address-two" label="Second Starting Location" helperText={generateHelperText(isValidSecondAddress, 'second')} onTextChange={handleSecondLocationUpdate} onSelectDropDown={handleSecondLocationSelect}/>
-              </Grid>
-              <Grid item sx={{ width: "100%" }}>
-                <HomePageActivitySelect statusCode={submitButtonPressed} id="select-activity" label="Activity (Optional)" helperText="Enter an activity of your choice." onNewSelect={handleActivityUpdate} />
-                {/* <HomePageActivityInput statusCode={submitButtonPressed} id="select-activity" label="Activity (Optional)" helperText="Enter an activity of your choice." onNewSelect={handleActivityUpdate} /> */}
-              </Grid>
-              <Grid item sx={{ width: "100%" }}>
-                <HomePageTransportationButtons onButtonChange={handleTransportationUpdate}/>
-              </Grid>
-              <Grid item sx={{ width: "100%" }}>
-                <HomePageFormButton isLoading={loading}/>
-              </Grid>
-            </Grid>
-          </form>
-        </Item>
-        {/* <div id="slogan">
-          Meet More. Travel Less. Discover More.
-        </div> */}
-      </div>
-      {/* </div> */}
-      <HomePageFooter />
-      {/* <div
-        alt="background"
-        id="homepage-background-image"
-        style={{ backgroundImage: `url(${imageURL})` }}
-        >
-      </div> */}
-    </div>
+    // </form> 
   );
-};
+}
 
-export default HomePage;
+export default MeetingLocationHeaderForm;

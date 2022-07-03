@@ -13,7 +13,7 @@ const HomePageActivitySelect = (props) => {
   const [activity, setActivity] = useState('Any');
   
   // Init local variables
-  const { id, label, helperText, statusCode } = props;
+  const { id, label, helperText, statusCode, removeHelperText } = props;
   const listOfActivities = ["Any", "Arts & Entertainment", "Beauty & Spas", "Food", "Hotels & Travel", "Nightlife", "Restaurants", "Shopping"];
   const yelpURL = process.env.REACT_APP_PROXY + "https://api.yelp.com/v3/categories";
   const apiKey = process.env.REACT_APP_YELP_API_KEY;
@@ -53,7 +53,7 @@ const HomePageActivitySelect = (props) => {
       label={label}
       value={activity}
       onChange={changeActivity}
-      helperText={helperText}
+      helperText={!removeHelperText ? helperText : ''}
       FormHelperTextProps={{
         sx: {
           color:  statusCode ? '#2e7d32' : ''

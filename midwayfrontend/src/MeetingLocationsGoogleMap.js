@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import MapCenterControl from './MapCenterControl';
+import React, { useRef, useEffect, useContext } from 'react';
+import { GoogleMapContext } from "./GoogleMapContext";
 
 /*
  * Title format:
@@ -35,7 +35,7 @@ const createMarkerCollectionOfBusinessesHelper = (business) => {
   for (let { coordinates, location, name, url } of business) {
     const title = constructMarkerTitle(name, location, url);
     const position = {lat: coordinates.latitude, lng: coordinates.longitude};
-    collection.push([position, null, title]);
+    collection.push([position, null, title, name]);
   }
   return collection;
 }
@@ -94,8 +94,8 @@ const createCenterControl = (centerControlContainer, map, bounds) => {
 }
 
 const MeetingLocationsGoogleMapWrapper = ({ style, meetingLocationsData }) => {
+  const { setMapInstance, setMapMarkerInfoWindow, setMapMarkerInformation, setBusinessNameToMarker } = useContext(GoogleMapContext);
   const ref = useRef(null);
-  // const [map, setMap] = useState();
 
   const { midPointGeographicCoordinate, businesses, nearbyCitiesAndBusinesses, requestBody } = meetingLocationsData;
 
@@ -103,6 +103,7 @@ const MeetingLocationsGoogleMapWrapper = ({ style, meetingLocationsData }) => {
     // Create the map
     const map = new window.google.maps.Map(ref.current, {
       center: midPointGeographicCoordinate,
+      gestureHandling: "greedy",
       zoom: 15,
       streetViewControl: false,
     });
@@ -111,20 +112,21 @@ const MeetingLocationsGoogleMapWrapper = ({ style, meetingLocationsData }) => {
     const markerInfoWindow = new window.google.maps.InfoWindow();
 
     // Create a collection for the first and second address marker
-    const addressCollection = [
-      [requestBody.addressesOfGeographicCoordinates[0], 'Adr1', `<div class="marker-title-name">Address 1:</div> ${requestBody.firstAddress}`],
-      [midPointGeographicCoordinate, "MP", "Calculated Midpoint"],
-      [requestBody.addressesOfGeographicCoordinates[1], 'Adr2', `<div class="marker-title-name">Address 2:</div> ${requestBody.secondAddress}`],
+    const markerInformation = [
+      [requestBody.addressesOfGeographicCoordinates[0], 'Adr1', `<div class="marker-title-name">Address 1:</div> ${requestBody.firstAddress}`, undefined],
+      [midPointGeographicCoordinate, "MP", "Calculated Midpoint", undefined],
+      [requestBody.addressesOfGeographicCoordinates[1], 'Adr2', `<div class="marker-title-name">Address 2:</div> ${requestBody.secondAddress}`, undefined],
       ...createMarkerCollectionOfBusinesses(businesses, nearbyCitiesAndBusinesses)
     ];
 
     // Sets bounds for the map so that the map will show all the points in the collection
     let bounds = new window.google.maps.LatLngBounds();
 
-    const pinImageURL = "https://upload.wikimedia.org/wikipedia/commons/e/ed/Map_pin_icon.svg";
+    // const pinImageURL = "https://upload.wikimedia.org/wikipedia/commons/e/ed/Map_pin_icon.svg";
+    const businessNameToMarkerInstance = {};
 
     // Iterate through all the addresses and mark a marker for them on the map
-    addressCollection.forEach(([position, label, title], i) => {
+    markerInformation.forEach(([position, label, title, businessName], i) => {
       // Creates a marker on the map
       const marker = new window.google.maps.Marker({
         position,
@@ -136,11 +138,16 @@ const MeetingLocationsGoogleMapWrapper = ({ style, meetingLocationsData }) => {
         }
       });
 
+      // Store the marker instance to the name of the business if it's not the starting locations or mid point
+      if (businessName !== undefined) {
+        businessNameToMarkerInstance[businessName] = marker;
+      }
+
       // Stores the position of the marker 
       bounds.extend(marker.getPosition());
 
       // Allows the marker to display an infoWindow
-      marker.addListener("click", (e) => {
+      marker.addListener("click", () => {
         // When initally pressed close the info window
         const infoWindowPreviousContent = markerInfoWindow.getContent();
         markerInfoWindow.setContent(undefined);
@@ -173,6 +180,12 @@ const MeetingLocationsGoogleMapWrapper = ({ style, meetingLocationsData }) => {
     const centerControlDiv = document.createElement("div");
     createCenterControl(centerControlDiv, map, bounds);
     map.controls[window.google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
+
+    // Store the state of all the map information
+    setMapInstance(map);
+    setMapMarkerInfoWindow(markerInfoWindow);
+    setMapMarkerInformation(markerInformation);
+    setBusinessNameToMarker(businessNameToMarkerInstance);
 
   }, []);
 
