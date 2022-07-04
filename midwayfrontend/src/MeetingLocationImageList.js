@@ -6,6 +6,8 @@ import ImageListItem from '@mui/material/ImageListItem';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArticleIcon from '@mui/icons-material/Article';
 
+import MeetingLocationBusinessHeader from "./MeetingLocationBusinessHeader";
+
 const MeetingLocationImageList = () => {
   const { setIsBusinessPressed, businessInformation } = useContext(BusinessPressedContext);
   const [imageData, setImageData] = useState([]);
@@ -52,7 +54,7 @@ const MeetingLocationImageList = () => {
       cols={4}
       rowHeight={120}
     >
-      <Button variant="outlined" size="small" startIcon={<ArrowBackIosNewIcon />} id={"meeting-locations-business-information-back-button"} onClick={goBackHandler} color="inherit">Go Back</Button>
+      <Button variant="contained" size="small" startIcon={<ArrowBackIosNewIcon />} id={"meeting-locations-business-information-back-button"} onClick={goBackHandler}>Go Back</Button>
       {imageData.map((item) => (
         <ImageListItem key={item.img} cols={item.cols || 1} rows={item.rows || 1}>
           <img
@@ -63,7 +65,8 @@ const MeetingLocationImageList = () => {
           />
           </ImageListItem>
       ))}
-      <Button variant="outlined" size="small" endIcon={<ArticleIcon />} id={"meeting-locations-business-information-more-image-button"} onClick={goToYelpHandler} color="inherit">View more on Yelp</Button>
+      <MeetingLocationBusinessHeader business={businessInformation}/>
+      {/* <Button variant="outlined" size="small" endIcon={<ArticleIcon />} id={"meeting-locations-business-information-more-image-button"} onClick={goToYelpHandler} color="inherit">View more on Yelp</Button> */}
     </ImageList>
   );
 

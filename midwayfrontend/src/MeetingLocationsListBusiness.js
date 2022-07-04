@@ -81,11 +81,9 @@ const MeetingLocationsListBusiness = ( { business, num } ) => {
             </div >
           </Stack>
           <Stack direction="row" spacing={1} className="business-categories">
-            {
-              business.categories.length > 0 && business.categories.map((category, index) => 
+            { business.categories.length > 0 && business.categories.map((category, index) => 
                 <Chip label={category.title} variant="outlined" size="small" key={index}/>
-              )
-            }
+              ) }
           </Stack>
           <Stack direction="row" spacing={1} className="business-open"> 
             <div className="business-open-hours">

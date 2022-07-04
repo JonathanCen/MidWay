@@ -9,12 +9,10 @@ const Item = (props) => {
       elevation={6}
       sx={{
         padding: isBusinessInformation ? "5px" : "10px",
-        // marginLeft: isBusinessInformation ? "10px" : "0px",
-        // marginRight: isBusinessInformation ? "10px" : "0px",
         margin: isBusinessInformation ? "10px" : "0px",
         backgroundColor: "#fff",
         borderRadius: "3%",
-        height: "100%", width: "100%"
+        // height: "100%", width: "100%"
       }}
     >
       {props.children}

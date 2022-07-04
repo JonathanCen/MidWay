@@ -291,12 +291,36 @@ h1 {
   position: absolute;
   top: 5px;
   left: 5px;
-  background-color: white;
+  background-color: #ff0000;
   z-index: 1;
+  border: 2px white solid;
 }
 
 #meeting-locations-business-information-image {
   box-shadow: inset 10px 10px 50px #fff;
+}
+
+#business-information-header {
+  position: absolute;
+  left: 5%;
+  bottom: 5%;
+  z-index: 1;
+  color: white;
+  text-shadow: 2px 2px 20px rgba(0, 0, 0, 1);
+}
+
+#business-information-title-in-image {
+  font-weight: 700;
+  color: white;
+  text-shadow: 2px 2px 20px rgba(0, 0, 0, 1);
+}
+
+#business-information-rating-text {
+  color: white;
+  line-height: 30px;
+  font-weight: 700;
+  font-size: 14px;
+  text-shadow: 2px 2px 21px rgba(0, 0, 0, 1);
 }
 
 #meeting-locations-business-information-more-image-button {
@@ -310,7 +334,36 @@ h1 {
 #business-information-title {
   font-weight: 700;
   font-size: 30px;
+  margin-top: 5%;
   margin-left: 5%;
+}
+
+#business-information-hours, #business-information-address-header {
+  font-weight: 800;
+}
+
+#business-information-address > div {
+  text-align: center;
+}
+
+.business-information-main-address {
+  font-weight: 500;
+  font-size: .90rem;
+}
+
+.business-information-hours-day {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.business-information-hours-day-hours {
+  font-size: .75rem;
+  font-weight: 500;
+}
+
+.business-information-postal-information {
+  font-size: .80rem;
+  color: grey;
 }
 
 /* Google Maps */

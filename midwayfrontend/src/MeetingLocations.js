@@ -62,7 +62,7 @@ const MeetingLocations = (props) => {
           <MeetingLocationHeaderForm/>
         </Stack>
       </Grid>
-      <Grid item xs={4} sx={{  height: "100%", height: "90%", overflowY: "scroll" }}> 
+      <Grid item xs={4} sx={ isBusinessPressed ? { height: "100%", overflowY: "scroll" } : { height: "90%", overflowY: "scroll" }}> 
         <Collapse in={isBusinessPressed}>
           <MeetingLocationsBusinessInformation getNum={getBusinessNum}/>
         </Collapse>
