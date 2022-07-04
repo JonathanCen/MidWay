@@ -306,7 +306,7 @@ h1 {
   bottom: 5%;
   z-index: 1;
   color: white;
-  text-shadow: 2px 2px 20px rgba(0, 0, 0, 1);
+  /* text-shadow: 2px 2px 20px rgba(0, 0, 0, 1); */
 }
 
 #business-information-title-in-image {
@@ -361,8 +361,31 @@ h1 {
   font-weight: 500;
 }
 
+#business-information-no-hours {
+  font-size: .90rem;
+  font-weight: 500;
+}
+
 .business-information-postal-information {
   font-size: .80rem;
+  color: grey;
+}
+
+#business-information-reviews-header {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.business-information-review-url, .business-information-reviewer-profile-url {
+  text-decoration: underline;
+  color: inherit;
+}
+
+#business-information-reviews-no-reviews {
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
   color: grey;
 }
 

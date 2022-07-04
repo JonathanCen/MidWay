@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { BusinessPressedContext } from "./BusinessPressedContext";
 import { Grid, Stack, Divider  } from '@mui/material';
 import MeetingLocationImageList from "./MeetingLocationImageList";
+import MeetingLocationBusinessReview from "./MeetingLocationBusinessReview";
 
 const isValidAddress = (address) => {
   return address !== "" && address !== undefined && address !== null
@@ -143,12 +144,15 @@ const MeetingLocationsBusinessInformation = (props) => {
   const [state, setState] = useState('');
   const [postalCode, setPostalCode] = useState('');
   const [arrHours, setArrayHours] = useState([]);
+  const [businessReviews, setBusinessReviews] = useState([]);
 
   // Check the current date so we can display the proper hours for the current day
   const currentDateIndex = getCurrentDateIndex();
   useEffect(() => {
     if (Object.keys(businessInformation).length > 0) {
-      setArrayHours(parseHours(businessInformation.hours[0].open));
+      if (businessInformation.hours.length > 0) {
+        setArrayHours(parseHours(businessInformation.hours[0].open));
+      }
       // setArrayHours(parseHours(hours));
       setAddress1(businessInformation.location.address1);
       setAddress2(businessInformation.location.address2);
@@ -156,18 +160,19 @@ const MeetingLocationsBusinessInformation = (props) => {
       setCity(businessInformation.location.city);
       setState(businessInformation.location.state);
       setPostalCode(businessInformation.location.postal_code);
+      setBusinessReviews(businessInformation.reviews);
     }
   }, [businessInformation]);
 
   return (
-    <Grid container direction="row" sx={{height: "100%", width : "100%"}} className="business-information">
-      <Grid item xs={12} ><MeetingLocationImageList/></Grid>
+    <Grid container direction="row" className="business-information" sx={{height: "100%"}} spacing={3}>
+      <Grid item xs={12} sx={{height: "100%"}}><MeetingLocationImageList/></Grid>
       <Grid item xs={12} sx={{height: "100%"}}>
-        <Stack direction="column" spacing={3} sx={{height: "100%", width: "100%"}} >
+        <Stack direction="column" spacing={3} >
             <div id="business-information-meta-information">
               <Stack direction="row" justifyContent="space-evenly" alignItems="center" divider={<Divider orientation="vertical" flexItem />} >
                   {/* <div id="business-information-about"> */}
-                    <Stack direction="column" sx={{width:"100%"}} alignItems="center">
+                    <Stack direction="column" alignItems="center">
                       <div id="business-information-address-header">Address</div>
                       <div id="business-information-address">
                         {isValidAddress(address1) && <div className="business-information-main-address">{address1}</div>}
@@ -178,25 +183,30 @@ const MeetingLocationsBusinessInformation = (props) => {
                     </Stack>
                   {/* </div> */}
                   {/* <div id="business-information-hours"> */}
-                    <Stack direction="column" sx={{width:"100%"}} alignItems="center">
+                    <Stack direction="column" alignItems="center">
                       <div id="business-information-hours">Hours</div>
-
-                      { arrHours.map((day, index) => {
-                        return (
-                          <div key={index}> 
-                            <div className="business-information-hours-day"> { day[0] }:
-                              { day[1].map((hour, indexJ) => (<span className="business-information-hours-day-hours" key={indexJ}> {hour}</span>)) } 
-                            </div> 
-                        </div>);
-                      }) }
+                      { arrHours.length > 0 
+                          ? arrHours.map((day, index) => {
+                            return (
+                              <div key={index}> 
+                                <div className="business-information-hours-day"> { day[0] }:
+                                  { day[1].map((hour, indexJ) => (<span className="business-information-hours-day-hours" key={indexJ}> {hour}</span>)) } 
+                                </div> 
+                            </div>);
+                            }) 
+                          : <div id="business-information-no-hours">Sorry no hours avaliable</div> 
+                      }
                     </Stack>
                   {/* </div> */}
                 </Stack>
             </div>
-            <div id="busienss-information-reviews">
-                <div>Review 1</div>
-                <div>Review 2</div>
-                <div>Review 3</div>
+            <div id="business-information-reviews">
+              <div id="business-information-reviews-header">Reviews</div>
+              { businessReviews.length > 0
+                ? businessReviews.map((review, index) => 
+                    <MeetingLocationBusinessReview review={review} key={index}/>
+                  )
+                : <div id="business-information-reviews-no-reviews"> Sorry currently there are no reviews for this business </div> }
             </div>
         </Stack>
       </Grid>
