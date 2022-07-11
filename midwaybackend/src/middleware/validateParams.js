@@ -1,8 +1,23 @@
-const { fetchGeocoding } = require('../utils');
+const { fetchGeocoding } = require("../utils");
 
 // Choices for the users
-const listOfActivities = ["Any", "Arts & Entertainment", "Beauty & Spas", "Food", "Hotels & Travel", "Nightlife", "Restaurants", "Shopping"];
-const listOfTransportation = ["Driving", "Transit", "Walking", "Cycling", "Flights"];
+const listOfActivities = [
+  "Any",
+  "Arts & Entertainment",
+  "Beauty & Spas",
+  "Food",
+  "Hotels & Travel",
+  "Nightlife",
+  "Restaurants",
+  "Shopping",
+];
+const listOfTransportation = [
+  "Driving",
+  "Transit",
+  "Walking",
+  "Cycling",
+  "Flights",
+];
 
 // Validates that the field is not an empty string
 const validateNotUndefined = (field, fieldString, invalidFields) => {
@@ -11,100 +26,117 @@ const validateNotUndefined = (field, fieldString, invalidFields) => {
     return false;
   }
   return true;
-}
+};
 
 // Validates address using Google Geocoding API
-const validateAddress = async (address, invalidFields, isFirstAddress=true) => {
+const validateAddress = async (
+  address,
+  invalidFields,
+  isFirstAddress = true
+) => {
   try {
-    const addressString = isFirstAddress ? 'firstAddress' : 'secondAddress';
+    const addressString = isFirstAddress ? "firstAddress" : "secondAddress";
     if (!validateNotUndefined(address, addressString, invalidFields)) {
       return [null, false];
     }
     const geocodingResponse = await fetchGeocoding(address);
-    if (geocodingResponse.data.status !== 'OK') {
+    if (geocodingResponse.data.status !== "OK") {
       invalidFields.push(addressString);
       return [null, false];
     }
-    console.log(geocodingResponse.data.results[0].geometry.location);
-    const geographicCoordinates = geocodingResponse.data.results[0].geometry.location;
+    const geographicCoordinates =
+      geocodingResponse.data.results[0].geometry.location;
     return [geographicCoordinates, true];
-  } catch(err) {
-    console.log(`Error: ${err}`)
+  } catch (err) {
+    console.log(`Error: ${err}`);
     return [null, false];
   }
-}
+};
 
 // Validates that the activity is within the list of activities
 const validateActivity = (activity, invalidFields) => {
-  if (!validateNotUndefined(activity, 'activity', invalidFields)) {
+  if (!validateNotUndefined(activity, "activity", invalidFields)) {
     return false;
   }
-  const lowerListOfActivities = listOfActivities.map((activities) => activities.toLowerCase());
+  const lowerListOfActivities = listOfActivities.map((activities) =>
+    activities.toLowerCase()
+  );
   const lowerActivity = activity.toLowerCase();
   if (!lowerListOfActivities.includes(lowerActivity)) {
-    invalidFields.push('activity');
+    invalidFields.push("activity");
     return false;
   }
   return true;
-}
+};
 
 // Validates that the activity is not an empty string
 const validateNotEmpty = (activity, invalidFields) => {
-  if (activity === '') {
-    invalidFields.push('activity');
+  if (activity === "") {
+    invalidFields.push("activity");
     return false;
   }
   return true;
-}
+};
 
 // Validates that the transportation is not an empty string
 const validateTransportation = (transportation, invalidFields) => {
-  if (!validateNotUndefined(transportation, 'transportation', invalidFields)) {
+  if (!validateNotUndefined(transportation, "transportation", invalidFields)) {
     return false;
   }
-  const lowerListOfTransportation = listOfTransportation.map((transit) => transit.toLowerCase());
+  const lowerListOfTransportation = listOfTransportation.map((transit) =>
+    transit.toLowerCase()
+  );
   const lowerTransportation = transportation.toLowerCase();
   if (!lowerListOfTransportation.includes(lowerTransportation)) {
-    invalidFields.push('transportation');
+    invalidFields.push("transportation");
     return false;
   }
   return true;
-}
-
+};
 
 // Checks to ensure that the url has valid address and activity
-const validateParams = async (req, res, next) =>  {
-  const { firstAddress, secondAddress, activity, transportation } = req.params; 
+const validateParams = async (req, res, next) => {
+  const { firstAddress, secondAddress, activity, transportation } = req.params;
 
   // Store all the invalid fields when validating
   const invalidFields = [];
 
   // Validate each field
   // const isValidFirstAddress = true;
-  const [firstAddressGeographicCoordinates, isValidFirstAddress] = await validateAddress(firstAddress, invalidFields);
-  const [secondAddressGeographicCoordinates, isValidSecondAddress] = await validateAddress(secondAddress, invalidFields, false);
+  const [firstAddressGeographicCoordinates, isValidFirstAddress] =
+    await validateAddress(firstAddress, invalidFields);
+  const [secondAddressGeographicCoordinates, isValidSecondAddress] =
+    await validateAddress(secondAddress, invalidFields, false);
   const isValidActivity = validateActivity(activity, invalidFields);
-  const isValidTransportation = validateTransportation(transportation, invalidFields);
+  const isValidTransportation = validateTransportation(
+    transportation,
+    invalidFields
+  );
 
   // Pass the fetched data to the next middleware
-  res.locals.addressesOfGeographicCoordinates = [firstAddressGeographicCoordinates, secondAddressGeographicCoordinates];
+  res.locals.addressesOfGeographicCoordinates = [
+    firstAddressGeographicCoordinates,
+    secondAddressGeographicCoordinates,
+  ];
 
   // Is only valid if all checks return true
-  const isValid = isValidFirstAddress && isValidSecondAddress && isValidActivity && isValidTransportation;
-  console.log(isValidFirstAddress)
-  console.log(isValidSecondAddress)
-  console.log(isValidActivity)
-  console.log(isValidTransportation)
-  console.log(isValid);
-  
+  const isValid =
+    isValidFirstAddress &&
+    isValidSecondAddress &&
+    isValidActivity &&
+    isValidTransportation;
+
   // Check whether the inputs are valid, if not sends a 406: not acceptable response
   // Otherwise the request is valid, so continue onto the next middleware
   if (!isValid) {
     res.status(406);
-    res.json({message: `One of the field are not valid. Please check again the following fields : ${invalidFields}`, isValid: false});
+    res.json({
+      message: `One of the field are not valid. Please check again the following fields : ${invalidFields}`,
+      isValid: false,
+    });
   } else {
     next();
   }
-}
+};
 
 module.exports = validateParams;

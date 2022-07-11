@@ -32,7 +32,7 @@ h1 {
   overflow: hidden;
   position: relative;
   /* border-bottom: 1px solid #d5dde6 ; */
-  font-family: 'Poppins','Helvetica Neue',Helvetica,Arial,sans-serif;
+  font-family: "Poppins", "Helvetica Neue", Helvetica, Arial, sans-serif;
   /* font-family: "Anek Latin", sans-serif; */
 }
 
@@ -56,8 +56,8 @@ h1 {
 #home-page-body {
   /* background-image: url("https://s3-media0.fl.yelpcdn.com/educatorphoto/oAiaOrUctS_W5awpIL6lhA/o.jpg"); */
   background-size: cover;
-  width: 100%;  
-  /* height: 90%; */ 
+  width: 100%;
+  /* height: 90%; */
   display: flex;
   /* justify-content: center; */
   align-items: center;
@@ -77,10 +77,11 @@ h1 {
   padding: 5px;
 }
 
-#input-address-one, #input-address-two, #select-activity {
+#input-address-one,
+#input-address-two,
+#select-activity {
   width: 100%;
 }
-
 
 #home-page-footer {
   width: 100vw;
@@ -90,15 +91,17 @@ h1 {
   flex-direction: column;
   /* justify-content: space-evenly;
   align-items: center; */
-  border-top: 1px solid #d5dde6 ;
+  border-top: 1px solid #d5dde6;
   /* font-family: "Anek Latin", sans-serif; */
   height: 15%;
 }
 
 #home-page-body-wrapper {
-  width: 100%; 
+  width: 100%;
   height: 90%;
-  background: rgba(0, 0, 0, 0) linear-gradient(to bottom, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0.6) 100%) repeat 0 0;
+  background: rgba(0, 0, 0, 0)
+    linear-gradient(to bottom, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0.6) 100%)
+    repeat 0 0;
 }
 
 #home-page-form-button {
@@ -111,7 +114,7 @@ h1 {
   font-size: 20px;
   font-weight: 800;
   color: #27252b;
-  font-family: 'Anek Latin', sans-serif;
+  font-family: "Anek Latin", sans-serif;
 
   vertical-align: middle;
   text-align: center;
@@ -122,7 +125,7 @@ h1 {
 #slogan {
   color: white;
   font-size: 20px;
-  font-family: 'Dancing Script', cursive;
+  font-family: "Dancing Script", cursive;
   /* font-family: 'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif; */
 }
 
@@ -210,7 +213,8 @@ h1 {
 }
 
 /* !Theres a problem showing the icon */
-.pac-icon, .pac-item-selected>.pac-icon {
+.pac-icon,
+.pac-item-selected > .pac-icon {
   /* background-image: url("../public/map-pin-solid.svg"); */
   /* background: url("../public/map-pin-solid.svg");
   background-repeat: no-repeat;
@@ -223,12 +227,10 @@ h1 {
   background-color: #eff5fb;
 }
 
-
 .pac-container:after {
   background-image: none !important;
   height: 0px;
 }
-
 
 /* Meeting Locations Page */
 
@@ -245,13 +247,17 @@ h1 {
   margin: 10px 40px 0 20px;
   cursor: pointer;
   width: fit-content;
-  font-family: 'Poppins','Helvetica Neue',Helvetica,Arial,sans-serif;
+  font-family: "Poppins", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 800;
-  color: #1b1b1c
+  color: #1b1b1c;
 }
 
 /* Meeting Locations List */
-.business-title, .business-rating, .business-categories, .business-open, .business-review {
+.business-title,
+.business-rating,
+.business-categories,
+.business-open,
+.business-review {
   margin-bottom: 7px;
 }
 
@@ -260,18 +266,19 @@ h1 {
   font-weight: 700;
 }
 
-.business-content, .business-information {
-  font-family: 'Open Sans', sans-serif;
+.business-content,
+.business-information {
+  font-family: "Open Sans", sans-serif;
 }
 
 .meeting-location-list-title {
-  font-family: 'Poppins','Helvetica Neue',Helvetica,Arial,sans-serif;
+  font-family: "Poppins", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 30px;
   font-weight: 600;
   margin: 20px 10px 40px 10px;
 }
 
-.business-rating { 
+.business-rating {
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -315,6 +322,16 @@ h1 {
   text-shadow: 2px 2px 20px rgba(0, 0, 0, 1);
 }
 
+.business-information-title-in-image-anchor {
+  color: inherit;
+  text-decoration: underline 0.15em rgba(0, 0, 0, 0);
+  transition: text-decoration-color 300ms;
+}
+
+.business-information-title-in-image-anchor:hover {
+  text-decoration-color: white;
+}
+
 #business-information-rating-text {
   color: white;
   line-height: 30px;
@@ -338,7 +355,8 @@ h1 {
   margin-left: 5%;
 }
 
-#business-information-hours, #business-information-address-header {
+#business-information-hours,
+#business-information-address-header {
   font-weight: 800;
 }
 
@@ -348,7 +366,7 @@ h1 {
 
 .business-information-main-address {
   font-weight: 500;
-  font-size: .90rem;
+  font-size: 0.9rem;
 }
 
 .business-information-hours-day {
@@ -357,17 +375,17 @@ h1 {
 }
 
 .business-information-hours-day-hours {
-  font-size: .75rem;
+  font-size: 0.75rem;
   font-weight: 500;
 }
 
 #business-information-no-hours {
-  font-size: .90rem;
+  font-size: 0.9rem;
   font-weight: 500;
 }
 
 .business-information-postal-information {
-  font-size: .80rem;
+  font-size: 0.8rem;
   color: grey;
 }
 
@@ -377,7 +395,8 @@ h1 {
   text-align: center;
 }
 
-.business-information-review-url, .business-information-reviewer-profile-url {
+.business-information-review-url,
+.business-information-reviewer-profile-url {
   text-decoration: underline;
   color: inherit;
 }
@@ -393,7 +412,7 @@ h1 {
 .marker-label {
   /* font-family: 'Roboto', sans-serif; */
   /* font-weight: 300; */
-  font: 400 11px 'Roboto', Arial, sans-serif;
+  font: 400 11px "Roboto", Arial, sans-serif;
 }
 
 #meeting-locations-header-form-button {
@@ -425,7 +444,6 @@ h1 {
 .marker-links:hover {
   text-decoration: underline;
 }
-
 
 /* Page Not Found CSS */
 #page-not-found-heading,
