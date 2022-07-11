@@ -68,7 +68,7 @@ Run the app
 
 ## Built With
 
-  - [React](https://www.contributor-covenant.org/) - The front-end library for the front-end
+  - [React](https://reactjs.org/) - The front-end library for the front-end
   - [Express](https://expressjs.com/) - The web framework for Node.js for the back-end
   - [Google Maps Platform](https://developers.google.com/maps) - For computating travel times and distance 
   - [Yelp](https://www.yelp.com/developers) - For finding businesses and activities
