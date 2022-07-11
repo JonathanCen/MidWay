@@ -15,27 +15,27 @@ To run this application locally on your computer, you'll need `Git` and `Node.js
 
  Then run the following command in the command line and go to the desired directory to store this project:
 
-Clone this repository
+Clone this repository:
 
     git clone https://github.com/JonathanCen/MidWay.git
 
-Go into the repository
+Go into the repository:
 
     cd MidWay
 
-Install all dependicies
+Install all dependencies:
 
     npm install
 
-Go into the back-end directory
+Go into the back-end directory:
 
     cd midwaybackend
 
-Install all dependicies
+Install all dependencies:
 
     npm install
 
-Then create a new `.env` file in the current directory and add these local variables with your API keys. For more information about the API keys go to the prerequisites
+Then create a new `.env` file in the current directory and add these local variables with your API keys. For more information about the API keys go to the prerequisites:
 
 ``` 
 GOOGLE_MAPS_API_KEY=REPLACE_THIS_WITH_YOUR_GOOGLE_MAPS_API_KEY
@@ -45,19 +45,19 @@ GEODB_API_KEY=REPLACE_THIS_WITH_YOUR_GEODB_API_KEY
 GEODO_API_HOST=REPLACE_THIS_WITH_YOUR_GEODO_API_HOST
 ```
 
-Go into the front-end directory
+Go into the front-end directory:
 
     cd ../midwayfrontend
 
-Install all dependicies
+Install all dependencies:
 
     npm install
 
-Go into the root directory
+Go into the root directory:
 
     cd ..
 
-Run the app
+Run the app:
 
     npm run dev
 
@@ -87,4 +87,4 @@ Feel free to check the [issues page](https://github.com/JonathanCen/MidWay/issue
 ## License
 
 Copyright © 2019 [Jonathan Cen](<ADD PERSONAL WEBSITE LINK>).\
-This project is [MIT liceLICENSEnsed](https://github.com/JonathanCen/MidWay/blob/main/LICENSE).
+This project is [MIT licensed](https://github.com/JonathanCen/MidWay/blob/main/LICENSE).
