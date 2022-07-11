@@ -68,8 +68,9 @@ Run the app
 
 ## Built With
 
-  - [React](https://reactjs.org/) - The front-end library for the front-end
-  - [Express](https://expressjs.com/) - The web framework for Node.js for the back-end
+  - [React](https://reactjs.org/) - Front-end library used to build the user interface 
+  - [Material UI](https://mui.com/) - Utilized the component library to facilitate the building the front-end
+  - [Express](https://expressjs.com/) - Web framework for Node.js for the back-end
   - [Google Maps Platform](https://developers.google.com/maps) - For computating travel times and distance 
   - [Yelp](https://www.yelp.com/developers) - For finding businesses and activities
   - [GeoDB Cities](http://geodb-cities-api.wirefreethought.com/) - For locating nearby cities 
