@@ -87,4 +87,4 @@ Feel free to check the [issues page](https://github.com/JonathanCen/MidWay/issue
 ## License
 
 Copyright © 2019 [Jonathan Cen](<ADD PERSONAL WEBSITE LINK>).\
-This project is [MIT licensed](https://github.com/JonathanCen/MidWay/blob/main/License).
+This project is [MIT liceLICENSEnsed](https://github.com/JonathanCen/MidWay/blob/main/LICENSE).
