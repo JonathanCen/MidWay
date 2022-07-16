@@ -9,10 +9,13 @@ import MeetingLocationsGoogleMapWrapper from "./MeetingLocationsGoogleMapWrapper
 import MeetingLocationsList from "./MeetingLocationsList";
 import MeetingLocationsBusinessInformation from "./MeetingLocationsBusinessInformation";
 import Collapse from "@mui/material/Collapse";
+import { MeetingLocationsContext } from "./MeetingLocationsContext";
 
 const MeetingLocations = (props) => {
   // Hook to get params passed in from the previous route
   const location = useLocation();
+
+  const { locationPathName } = useContext(MeetingLocationsContext);
 
   // Initalize some state, and retrieve some context
   const [businessNumbering, setBusinessNumbering] = useState({});
@@ -25,10 +28,6 @@ const MeetingLocations = (props) => {
   };
 
   useEffect(() => {
-    console.log(location);
-    if (location.state !== null) {
-      console.log(location.state.meetingLocationsData);
-    }
     // ! If location is empty/null/undefined, then we need to call the backend on these inputs
 
     // Iterate through all the businesses and assign them a numbering

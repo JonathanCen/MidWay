@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Card,
   CardMedia,
@@ -24,6 +24,8 @@ const MeetingLocationsListBusiness = ({ business, num }) => {
   const { setIsBusinessPressed, setBusinessInformation } = useContext(
     BusinessPressedContext
   );
+
+  const [businessHours, setBusinessHours] = useState({});
 
   const handleBusinessCardClick = () => {
     setIsBusinessPressed(true);
@@ -64,9 +66,26 @@ const MeetingLocationsListBusiness = ({ business, num }) => {
     }
   };
 
+  useEffect(() => {
+    const datesOpen = {};
+    if (business.hours.length > 0) {
+      for (let { day, ...hours } of business.hours[0].open) {
+        if (datesOpen.hasOwnProperty(day)) {
+          datesOpen[day].append(hours);
+        } else {
+          datesOpen[day] = [hours];
+        }
+      }
+
+      setBusinessHours({ ...datesOpen });
+    }
+  }, []);
+
   // Returns the local timezone current time and date
+  // ! Fix the date so that it corresponds to the current date
   const getCurrentDateIndex = () => {
     const currentDate = new Date();
+    const date = currentDate.getDate() === 0 ? 6 : currentDate.getDate() - 1;
     return currentDate.getDay();
   };
 
@@ -85,86 +104,96 @@ const MeetingLocationsListBusiness = ({ business, num }) => {
   const currentDateIndex = getCurrentDateIndex();
 
   return (
-    <Card
-      elevation={5}
-      sx={{
-        display: "flex",
-        margin: "10px",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-      onClick={handleBusinessCardClick}
-    >
-      <CardActionArea>
-        <Box sx={{ display: "flex", flexDirection: "column" }}>
-          <CardContent className="business-content" sx={{ height: "100%" }}>
-            <Stack direction="row" spacing={1}>
-              <div className="business-title">
-                {`${num}. ${business.name}`}{" "}
-              </div>
-              <div className="business-rating">
-                <div
-                  className="business-rating-rating"
-                  sx={{ display: "flex", alignItems: "center" }}
-                >
-                  <Rating
-                    value={business.rating || 0}
-                    size="small"
-                    precision={0.5}
-                    icon={<StarIcon fontSize="inherit" />}
-                    emptyIcon={<StarIcon fontSize="inherit" />}
-                    readOnly
-                  />
+    business !== undefined && (
+      <Card
+        elevation={5}
+        sx={{
+          display: "flex",
+          margin: "10px",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        onClick={handleBusinessCardClick}
+      >
+        <CardActionArea>
+          <Box sx={{ display: "flex", flexDirection: "column" }}>
+            <CardContent className="business-content" sx={{ height: "100%" }}>
+              <Stack direction="row" spacing={1}>
+                <div className="business-title">
+                  {`${num}. ${business.name}`}{" "}
                 </div>
-                <div className="business-rating-number-reviews">
-                  {business.review_count}
-                </div>
-              </div>
-            </Stack>
-            <Stack direction="row" spacing={1} className="business-categories">
-              {business.categories.length > 0 &&
-                business.categories.map((category, index) => (
-                  <Chip
-                    label={category.title}
-                    variant="outlined"
-                    size="small"
-                    key={index}
-                  />
-                ))}
-            </Stack>
-            <Stack direction="row" spacing={1} className="business-open">
-              <div className="business-open-hours">
-                {business.hours.length > 0 &&
-                  `${convert24HourClockNotationTo12HourClockNotation(
-                    business.hours[0].open[currentDateIndex].start
-                  )} - ${convert24HourClockNotationTo12HourClockNotation(
-                    business.hours[0].open[currentDateIndex].end
-                  )}`}
-              </div>
-              <div className="business-open-is-open">
-                {business.hours.length > 0 &&
-                  business.hours[0].is_open_now !== undefined && (
-                    <Chip
-                      className="business-open-is-open-text"
-                      label={business.hours[0].is_open_now ? "Open" : "Closed"}
-                      color={
-                        business.hours[0].is_open_now ? "success" : "error"
-                      }
+                <div className="business-rating">
+                  <div
+                    className="business-rating-rating"
+                    sx={{ display: "flex", alignItems: "center" }}
+                  >
+                    <Rating
+                      value={business.rating || 0}
                       size="small"
-                      sx={{ height: "16px" }}
+                      precision={0.5}
+                      icon={<StarIcon fontSize="inherit" />}
+                      emptyIcon={<StarIcon fontSize="inherit" />}
+                      readOnly
                     />
-                  )}
+                  </div>
+                  <div className="business-rating-number-reviews">
+                    {business.review_count}
+                  </div>
+                </div>
+              </Stack>
+              <Stack
+                direction="row"
+                spacing={1}
+                className="business-categories"
+              >
+                {business.categories.length > 0 &&
+                  business.categories.map((category, index) => (
+                    <Chip
+                      label={category.title}
+                      variant="outlined"
+                      size="small"
+                      key={index}
+                    />
+                  ))}
+              </Stack>
+              <Stack direction="row" spacing={1} className="business-open">
+                <div className="business-open-hours">
+                  {business.hours.length > 0 &&
+                    Object.keys(businessHours).length > 0 &&
+                    businessHours[currentDateIndex] !== undefined &&
+                    `${convert24HourClockNotationTo12HourClockNotation(
+                      businessHours[currentDateIndex][0].start
+                    )} - ${convert24HourClockNotationTo12HourClockNotation(
+                      businessHours[currentDateIndex][0].end
+                    )}`}
+                </div>
+                <div className="business-open-is-open">
+                  {business.hours.length > 0 &&
+                    business.hours[0].is_open_now !== undefined && (
+                      <Chip
+                        className="business-open-is-open-text"
+                        label={
+                          business.hours[0].is_open_now ? "Open" : "Closed"
+                        }
+                        color={
+                          business.hours[0].is_open_now ? "success" : "error"
+                        }
+                        size="small"
+                        sx={{ height: "16px" }}
+                      />
+                    )}
+                </div>
+              </Stack>
+              <div className="business-review">
+                {" "}
+                <CommentIcon color="disabled" sx={{ fontSize: 16 }} />{" "}
+                {`${business.reviews[0].text}`}
               </div>
-            </Stack>
-            <div className="business-review">
-              {" "}
-              <CommentIcon color="disabled" sx={{ fontSize: 16 }} />{" "}
-              {`${business.reviews[0].text}`}
-            </div>
-          </CardContent>
-        </Box>
-      </CardActionArea>
-    </Card>
+            </CardContent>
+          </Box>
+        </CardActionArea>
+      </Card>
+    )
   );
 };
 

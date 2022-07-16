@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { getBackgroundImagePromise } from "./utils";
 import Grid from "@mui/material/Grid";
 import Item from "./Item";
-
-import dummyData from "./DummyResult";
 
 import HomePageHeader from "./HomePageHeader";
 // import HomePageActivityInput from "./HomePageActivityInput";
@@ -13,6 +11,8 @@ import HomePageActivitySelect from "./HomePageActivitySelect";
 import HomePageTransportationButtons from "./HomePageTransportationButtons";
 import HomePageFormButton from "./HomePageFormButton";
 import HomePageFooter from "./HomePageFooter";
+
+import { MeetingLocationsContext } from "./MeetingLocationsContext";
 
 const HomePage = () => {
   // State for the form components
@@ -26,6 +26,8 @@ const HomePage = () => {
 
   // Hook used to navigate to meeting-location page
   const navigate = useNavigate();
+
+  const { setLocationPathName } = useContext(MeetingLocationsContext);
 
   // Ensure that the address the users selected are valid addresses in google maps
   const [submitButtonPressed, setSubmitButtonPressed] = useState(false);
@@ -171,6 +173,7 @@ const HomePage = () => {
               // Redirect to new page
               const meetingLocationsURL = `/meeting-locations/firstAddress=${firstAddress}/secondAddress=${secondAddress}/activity=${activity}/transportation=${transportation}`;
               redirectToMeetingLocationsPage(meetingLocationsURL, data);
+              setLocationPathName(meetingLocationsURL);
             }
           })
           .catch((err) => {

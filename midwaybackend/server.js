@@ -46,10 +46,10 @@ const calculateDuration = (legs) => {
     runningDuration += steps[stepsIndex].duration.value;
     stepsIndex += 1;
   }
-  console.log(
-    `runningDuration: ${runningDuration}, next duration: ${steps[stepsIndex].duration.value}`
-  );
-  console.log("Points:");
+  // console.log(
+  //   `runningDuration: ${runningDuration}, next duration: ${steps[stepsIndex].duration.value}`
+  // );
+  // console.log("Points:");
   const paths =
     [steps[stepsIndex].start_location] +
     util.decodePath(steps[stepsIndex].polyline.points) +
@@ -57,9 +57,9 @@ const calculateDuration = (legs) => {
   const durationOfEachPoint = steps[stepsIndex].duration.value / paths.length;
   const leftOverDuration = estimatedMidPoint - runningDuration;
   const numSteps = Math.floor(leftOverDuration / durationOfEachPoint) - 1;
-  console.log(durationOfEachPoint, leftOverDuration, numSteps);
-  console.log(paths[numSteps]);
-  console.log(paths[numSteps + 1]);
+  // console.log(durationOfEachPoint, leftOverDuration, numSteps);
+  // console.log(paths[numSteps]);
+  // console.log(paths[numSteps + 1]);
   return [paths[numSteps], paths];
 };
 
@@ -184,11 +184,12 @@ app.get("/getNearbyCities", async (req, res) => {
 //   // res.json("Welcome to MidWay server!");
 // });
 
-app.use(express.static(path.join(__dirname, "src", "public")));
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "..", "midwayfrontend", "build")));
 
 app.use((req, res, next) => {
-  res.sendFile(path.join(__dirname, "src", "public", "index.html"));
+  res.sendFile(
+    path.join(__dirname, "..", "midwayfrontend", "build", "index.html")
+  );
 });
 
 app.get("*", setResponseHeaders, (req, res) => {

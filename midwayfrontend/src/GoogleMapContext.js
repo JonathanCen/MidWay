@@ -11,7 +11,6 @@ const GoogleMapProvider = ({ children }) => {
 
   // Zoom into the map
 
-
   return (
     <GoogleMapContext.Provider
       value={{
@@ -22,12 +21,12 @@ const GoogleMapProvider = ({ children }) => {
         setMapInstance,
         setMapMarkerInfoWindow,
         setMapMarkerInformation,
-        setBusinessNameToMarker
+        setBusinessNameToMarker,
       }}
     >
       {children}
     </GoogleMapContext.Provider>
-  )
-}
+  );
+};
 
-export { GoogleMapContext, GoogleMapProvider }
+export { GoogleMapContext, GoogleMapProvider };

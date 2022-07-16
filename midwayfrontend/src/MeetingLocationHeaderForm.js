@@ -1,13 +1,12 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import Stack from "@mui/material/Stack";
-import dummyData from "./DummyResult";
 
 import HomePageAddressInput from "./HomePageAddressInput";
 import HomePageActivitySelect from "./HomePageActivitySelect";
 import ModeTransportationSelect from "./ModeTransportationSelect";
 import HomePageFormButton from "./HomePageFormButton";
-import { appHistory } from "./App";
+
+import { MeetingLocationsContext } from "./MeetingLocationsContext";
 
 const MeetingLocationHeaderForm = () => {
   const firstAddressRef = useRef(null);
@@ -29,6 +28,8 @@ const MeetingLocationHeaderForm = () => {
   const [submitButtonPressed, setSubmitButtonPressed] = useState(false);
   const [isValidFirstAddress, setIsValidFirstAddress] = useState(false);
   const [isValidSecondAddress, setIsValidSecondAddress] = useState(false);
+
+  const { setLocationPathName } = useContext(MeetingLocationsContext);
 
   /*
    * Event handlers when user types into the input boxes
@@ -128,11 +129,7 @@ const MeetingLocationHeaderForm = () => {
     setLoading(true);
 
     // Perform a fetch request
-    const serverURL =
-      process.env.REACT_APP_SERVER_URL || "http://localhost:5000/";
-    const url =
-      serverURL +
-      `find-locations/firstAddress=${firstAddress}/secondAddress=${secondAddress}/activity=${activity}/transportation=${transportation}`;
+    const url = `/find-locations/firstAddress=${firstAddress}/secondAddress=${secondAddress}/activity=${activity}/transportation=${transportation}`;
 
     fetch(url)
       .then((response) => {
@@ -152,6 +149,7 @@ const MeetingLocationHeaderForm = () => {
               // Redirect to new page
               const meetingLocationsURL = `/meeting-locations/firstAddress=${firstAddress}/secondAddress=${secondAddress}/activity=${activity}/transportation=${transportation}`;
               redirectToMeetingLocationsPage(meetingLocationsURL, data);
+              setLocationPathName(meetingLocationsURL);
             }
           })
           .catch((err) => {

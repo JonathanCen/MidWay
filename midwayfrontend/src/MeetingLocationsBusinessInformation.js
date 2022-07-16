@@ -38,6 +38,11 @@ const parseHours = (hours) => {
     }
   }
 
+  if (arrOpenHours.length > 0) {
+    const openHoursArr = exactOpenHours(arrOpenHours);
+    arrOpenHourStrings.push([days[currentDay], openHoursArr]);
+  }
+
   // Iterate through the rest of the days and fill them in as closed
   for (let i = arrOpenHourStrings.length; i < 7; i++) {
     arrOpenHourStrings.push([days[i], ["Closed"]]);
