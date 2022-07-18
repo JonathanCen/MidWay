@@ -125,7 +125,6 @@ const MeetingLocationHeaderForm = () => {
     }
 
     // Display loading animation on button
-    // ! There might be a bug, since the button is not loading?
     setLoading(true);
 
     // Perform a fetch request

@@ -14,7 +14,6 @@ const HomePageFooter = () => {
           Jonathan Cen
         </a>
       </div>
-      {/* <div id="home-page-footer-slogan"> Finding ways for people to meet in the middle. </div> */}
     </div>
   );
 };

@@ -7,7 +7,6 @@ const queryArray = ["Food and drink", "food", "activity", "hangout"];
  */
 const getBackgroundImagePromise = async () => {
   const query = queryArray[Math.floor(Math.random() * queryArray.length)];
-  console.log(query);
   return await unsplashAPI.photos.getRandom({
     query: query,
     orientation: "landscape",

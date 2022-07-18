@@ -11,9 +11,11 @@ import { BusinessPressedContext } from "./BusinessPressedContext";
  */
 
 // ! Based on the name of the business, but if the business is a chain then it might not capture the correct position
-const constructGoogleMapsURL = (name, location) => {
-  const { latitude, longitude } = location;
-  return `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}+${name}`;
+const constructGoogleMapsURL = (name, coordinates) => {
+  const { latitude, longitude, lat, lng } = coordinates;
+  return name !== null
+    ? `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}+${name}`
+    : `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
 };
 
 const isValidAddress = (address) => {
@@ -27,16 +29,17 @@ const getAddress = (location) => {
   return `${address} ${location.city}, ${location.state}`;
 };
 
-const constructMarkerTitle = (name, location, url) => {
-  const googleMapsURL = constructGoogleMapsURL(name, location);
+const constructMarkerTitle = (name, location, url, coordinates) => {
+  const googleMapsURL = constructGoogleMapsURL(name, coordinates);
   const address = getAddress(location);
   return `<div class="marker-title-name">${name}</div><div class="marker-address">${address}</div><div class="marker-links-container"><a href="${googleMapsURL}" target="_blank" class="marker-links">View on Google Maps</a><a href="${url}" target="_blank" class="marker-links">View on Yelp</a></div>`;
 };
 
 const createMarkerCollectionOfBusinessesHelper = (business) => {
   const collection = [];
+  console.log(business);
   for (let { coordinates, location, name, url } of business) {
-    const title = constructMarkerTitle(name, location, url);
+    const title = constructMarkerTitle(name, location, url, coordinates);
     const position = { lat: coordinates.latitude, lng: coordinates.longitude };
     collection.push([position, null, title, name]);
   }
@@ -163,14 +166,32 @@ const MeetingLocationsGoogleMapWrapper = ({ style, meetingLocationsData }) => {
       [
         requestBody.addressesOfGeographicCoordinates[0],
         "Adr1",
-        `<div class="marker-title-name">Address 1:</div> ${requestBody.firstAddress}`,
+        `<div class="marker-title-name">Address 1:</div><div class="marker-address">${
+          requestBody.firstAddress
+        }</div><div class="marker-links-container"><a href="${constructGoogleMapsURL(
+          null,
+          requestBody.addressesOfGeographicCoordinates[0]
+        )}" target="_blank" class="marker-links">View on Google Maps</a></div>`,
         undefined,
       ],
-      [midPointGeographicCoordinate, "MP", "Calculated Midpoint", undefined],
+      [
+        midPointGeographicCoordinate,
+        "MP",
+        `<div class="marker-title-name">Calculated Midpoint:</div><div class="marker-links-container"><a href="${constructGoogleMapsURL(
+          null,
+          midPointGeographicCoordinate
+        )}" target="_blank" class="marker-links">View on Google Maps</a></div>`,
+        undefined,
+      ],
       [
         requestBody.addressesOfGeographicCoordinates[1],
         "Adr2",
-        `<div class="marker-title-name">Address 2:</div> ${requestBody.secondAddress}`,
+        `<div class="marker-title-name">Address 2:</div><div class="marker-address">${
+          requestBody.secondAddress
+        }</div><div class="marker-links-container"><a href="${constructGoogleMapsURL(
+          null,
+          requestBody.addressesOfGeographicCoordinates[1]
+        )}" target="_blank" class="marker-links">View on Google Maps</a></div>`,
         undefined,
       ],
       ...createMarkerCollectionOfBusinesses(
@@ -227,9 +248,14 @@ const MeetingLocationsGoogleMapWrapper = ({ style, meetingLocationsData }) => {
           markerInfoWindow.setContent(marker.getTitle());
           markerInfoWindow.open(marker.getMap(), marker);
 
-          // Open the card window
-          setIsBusinessPressed(true);
-          setBusinessInformation({ ...businessNameToBusiness[businessName] });
+          if (businessName !== undefined) {
+            // Open the card window
+            setIsBusinessPressed(true);
+            setBusinessInformation({ ...businessNameToBusiness[businessName] });
+          } else {
+            // If its an address close the window
+            setIsBusinessPressed(false);
+          }
         }
       });
 

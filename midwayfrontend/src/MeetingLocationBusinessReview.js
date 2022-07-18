@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import Rating from "@mui/material/Rating";
 import StarsIcon from "@mui/icons-material/Stars";
+
 // Taken from material UI documentation
 const stringToColor = (string) => {
   let hash = 0;

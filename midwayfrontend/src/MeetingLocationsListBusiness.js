@@ -71,7 +71,7 @@ const MeetingLocationsListBusiness = ({ business, num }) => {
     if (business.hours.length > 0) {
       for (let { day, ...hours } of business.hours[0].open) {
         if (datesOpen.hasOwnProperty(day)) {
-          datesOpen[day].append(hours);
+          datesOpen[day] = datesOpen[day].concat(hours);
         } else {
           datesOpen[day] = [hours];
         }

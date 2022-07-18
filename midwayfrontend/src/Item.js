@@ -12,12 +12,11 @@ const Item = (props) => {
         margin: isBusinessInformation ? "10px" : "0px",
         backgroundColor: "#fff",
         borderRadius: "3%",
-        // height: "100%", width: "100%"
       }}
     >
       {props.children}
     </Paper>
   );
-}
+};
 
 export default Item;

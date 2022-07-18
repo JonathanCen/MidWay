@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Grid";
@@ -15,7 +15,7 @@ const MeetingLocations = (props) => {
   // Hook to get params passed in from the previous route
   const location = useLocation();
 
-  const { locationPathName } = useContext(MeetingLocationsContext);
+  const meetingLocationsListRef = useRef(null);
 
   // Initalize some state, and retrieve some context
   const [businessNumbering, setBusinessNumbering] = useState({});
@@ -56,6 +56,10 @@ const MeetingLocations = (props) => {
     setBusinessNumbering({ ...tmpBusinessNumbering });
   }, [location.pathname]);
 
+  useEffect(() => {
+    meetingLocationsListRef.current.scrollTo(0, 0);
+  }, [isBusinessPressed]);
+
   return (
     <Grid container sx={{ height: "100vh" }}>
       <Grid item xs={12} sx={{ height: "10vh", border: "solid 1px black" }}>
@@ -70,7 +74,12 @@ const MeetingLocations = (props) => {
           <MeetingLocationHeaderForm />
         </Stack>
       </Grid>
-      <Grid item xs={4} sx={{ height: "90%", overflowY: "scroll" }}>
+      <Grid
+        item
+        xs={4}
+        sx={{ height: "90%", overflowY: "scroll" }}
+        ref={meetingLocationsListRef}
+      >
         <Collapse in={isBusinessPressed}>
           <MeetingLocationsBusinessInformation getNum={getBusinessNum} />
         </Collapse>

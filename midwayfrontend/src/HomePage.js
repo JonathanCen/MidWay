@@ -150,11 +150,7 @@ const HomePage = () => {
     setLoading(true);
 
     // Perform a fetch request
-    const serverURL =
-      process.env.REACT_APP_SERVER_URL || "http://localhost:5000/";
-    const url =
-      serverURL +
-      `find-locations/firstAddress=${firstAddress}/secondAddress=${secondAddress}/activity=${activity}/transportation=${transportation}`;
+    const url = `/find-locations/firstAddress=${firstAddress}/secondAddress=${secondAddress}/activity=${activity}/transportation=${transportation}`;
 
     fetch(url)
       .then((response) => {
