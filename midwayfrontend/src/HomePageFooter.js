@@ -10,7 +10,7 @@ const HomePageFooter = () => {
         <a id="github-link" href="https://github.com/JonathanCen/MidWay">
           Source Code <GitHubIcon fontSize="small" />
         </a>
-        <a id="personal-page-link" href="https://google.com/">
+        <a id="personal-page-link" href="https://jonathancen.me/">
           Jonathan Cen
         </a>
       </div>
