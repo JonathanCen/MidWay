@@ -7,10 +7,18 @@ const HomePageFooter = () => {
     <div id="home-page-footer" style={{ background: `url(${imageURL})` }}>
       <div id="footer-slogan">Meet More. Travel Less. Discover More.</div>
       <div id="footer-contact-links">
-        <a id="github-link" href="https://github.com/JonathanCen/MidWay">
+        <a
+          id="github-link"
+          href="https://github.com/JonathanCen/MidWay"
+          target="_blank"
+        >
           Source Code <GitHubIcon fontSize="small" />
         </a>
-        <a id="personal-page-link" href="https://jonathancen.me/">
+        <a
+          id="personal-page-link"
+          href="https://jonathancen.me/"
+          target="_blank"
+        >
           Jonathan Cen
         </a>
       </div>
